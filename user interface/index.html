@@ -7,7 +7,7 @@
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/slider.css" rel="stylesheet">
-    <link href="css/pick-a-color-1.1.8.min.css" rel="stylesheet">
+    <link href="css/jquery.minicolors.css" rel="stylesheet">
     <script type='text/javascript' src="js/modernizr.js"></script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -33,30 +33,29 @@
 
 
 <body>
+<input type="text" value="YOUR-DEFAULT" name="YOUR-NAME" class="pick-a-color">
 
+<div id="sliders">
 
-<div class='slider-example'>
-    <div>
-        <input type="text" value="YOUR-DEFAULT" name="YOUR-NAME" class="pick-a-color">
-
-        <input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0"/>
-    </div>
-    <div>
-        <input id="ex2" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0"/>
-    </div>
+</div>
+<div>
+    <button id="btn_add">+</button>
 </div>
 
 <div class="canvasHolder">
-    <canvas id="testCanvas" width="400" height="400"></canvas>
+    <canvas id="testCanvas" width="240" height="40"></canvas>
 </div>
-
+<div>
+    <button id="btn_process">MAGIC!</button>
+</div>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="js/jquery-1.10.2.min.js"></script>
+<!--<script src="js/jquery-ui-1.8.18.custom.min.js"></script>-->
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <!--<script src="js/bootstrap.min.js"></script>-->
+<script src="js/jquery.minicolors.js"></script>
 <script src="js/bootstrap-slider.js"></script>
 <script src="js/tinycolor-min.js"></script>
-<script src="js/pick-a-color.js"></script>
 
 
 <script type="text/javascript" src="js/createjs/events/Event.js"></script>
@@ -97,41 +96,100 @@
 
 
     var stage;
-    var s;
-    var s2;
-    var rect;
 
+    var rect;
+    var count = 0;
     var colors = [];
     init = function() {
-        s = $('#ex1').slider().on('slide', slide).data('slider');
-        s2 = $('#ex2').slider().on('slide', slide).data('slider');
 
-        $(".pick-a-color").pickAColor();
+        $.minicolors.defaults.defaultValue = "#ff3123";
 
         stage = new createjs.Stage("testCanvas");
         rect = new createjs.Shape();
-        rect.graphics.beginLinearGradientFill(["rgba(255,0,0,1)","rgba(0,255,0,1)"], [0, 1], 0, 0, 400, 0).drawRect(0, 0, 400, 120);
+        rect.graphics.beginLinearGradientFill(["rgba(255,0,0,1)","rgba(0,255,0,1)"], [0, 1], 0, 0, 240, 0).drawRect(0, 0, 240, 100);
         stage.addChild(rect);
+
         stage.update();
+
+        $("#btn_add").click(addcolour);
+        $("#btn_process").click(processColor);
+    }
+
+    processColor = function() {
+        rect.cache(0, 0, 240, 100);
+        var data = rect.cacheCanvas.getContext("2d").getImageData(0, 0, 240, 1);
+
+        var outstring = "";
+
+        for (var i = 0; i < 240; i++) {
+
+
+
+            var r = data.data[i*4];
+            var g = data.data[(i*4)+1];
+            var b = data.data[(i*4)+2];
+            var a = data.data[(i*4)+3];
+            //console.log( r + "," + g + "," + b + "," + a);
+
+            outstring += "i"+i+"r"+r+"g"+g+"b"+b;
+
+        }
+        console.log(outstring);
+    }
+
+    addcolour = function() {
+        var id = "slider"+count;
+        var cid = "cp"+count;
+        var pid = "p"+count;
+        $( "#sliders" ).append( $( '<div><input id="'+id+'" data-slider-id="ex1Slider" type="text" data-slider-min="0" data-slider-max="240" data-slider-step="1" data-slider-value="0"/><input id="'+cid+'" data-defaultValue="#ff6600"/></div>' ) );
+        var s = $("#"+id).slider().on('slide', slide).data('slider');
+
+        var cp = $("#"+cid).minicolors();
+
+
+
+        var c = new SColor();
+        c.slider = s;
+        c.colorpicker = cp;
+        colors.push(c);
+        count++;
     }
 
     slide = function() {
-        var r = s.getValue()/100;
-        console.log(s.test);
+//        var r = s.getValue()/240;
+//        var r2 = s2.getValue()/240;
+        rect.uncache();
+        var gradients = buildGradientArray();
+        var colors = buildColorArray();
 
-        var r2 = s2.getValue()/100;
         rect.graphics.clear();
-        rect.graphics.beginLinearGradientFill([$(".pick-a-color").val(),"rgba(0,255,0,1)"], [r2, r], 0, 0, 400, 0).drawRect(0, 0, 400, 120);
+        rect.graphics.beginLinearGradientFill(colors, gradients, 0, 0, 240, 0).drawRect(0, 0, 240, 120);
 
-        rect.cache(0, 0, 400, 100);
-        var data = rect.cacheCanvas.getContext("2d").getImageData(0, 0, 400, 1);
-        console.log(data);
 
         stage.update();
     }
 
-    Color = function() {
+    buildGradientArray = function() {
+        var garray = [];
+        for (var o in colors) {
+            var val = colors[o].slider.getValue()/240;
+           garray.push(val);
+        }
+        return garray;
+    }
+    buildColorArray = function() {
+        var carray = [];
+        for (var o in colors) {
+            var val = colors[o].colorpicker.val();
+            carray.push(val);
+        }
+        return carray;
 
+    }
+
+    SColor = function() {
+        this.slider;
+        this.colorpicker;
     }
 
     $(document).ready(init);
