@@ -24,15 +24,19 @@
         #sliders {
             width: 100%;
         }
+        #container {
+            width: 300px;
+        }
         #slider {
             width: 200px;
         }
         .slider {
-            width: 90% !important;
+            width: 75% !important;
         }
         #testCanvas {
-            width: 90%;
-            /*max-width: 600px;*/
+            width: 75%;
+/*max-width: 600px;*/
+margin-left: 27px;
         }
         
         .minicolors-theme-default .minicolors-input {
@@ -40,12 +44,23 @@
             width: 0px;
             display: inline-block;
             padding-left: 26px;
+            border:none;
         }
+        
+        .slider-handle {
+            width: 30px;
+            height: 30px;
+        }
+        .slider.slider-horizontal .slider-handle {
+                margin-left: -15px;
+                margin-top: -10px;
+            }
     </style>
 </head>
 
 
 <body>
+    <div id="container">
 <div class="canvasHolder">
     <canvas id="testCanvas" width="240" height="40"></canvas>
 </div>
@@ -60,6 +75,8 @@
 <div>
     <button id="btn_process">MAGIC!</button>
 </div>
+        
+        </div>
 
 <!--<iframe width="720" height="437" src="http://www.ustream.tv/embed/16427450?v=3&amp;wmode=direct" scrolling="no" frameborder="0" style="border: 0px none transparent;">    </iframe>-->
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -171,7 +188,13 @@
         var cid = "cp"+count;
         var pid = "p"+count;
         var startColor = "#000000";
-        if (colorvalue) startColor = colorvalue;
+        if (colorvalue) {
+            startColor = colorvalue;
+        } else {
+            startColor = tinycolor.random().toHexString();
+            console.log(tinycolor.random().toHexString());
+            
+        }
         
         $.minicolors.defaults.defaultValue = startColor;
         
@@ -188,6 +211,8 @@
         c.colorpicker = cp;
         colors.push(c);
         count++;
+        
+        slide();
     }
 
     slide = function() {
@@ -208,7 +233,7 @@
         var garray = [];
         for (var o in colors) {
             var val = colors[o].slider.getValue()/240;
-           garray.push(val);
+            garray.push(val);
         }
         return garray;
     }
@@ -217,6 +242,8 @@
         for (var o in colors) {
             var val = colors[o].colorpicker.val();
             carray.push(val);
+            $(colors[o].slider.handle1).css("background-color",colors[o].colorpicker.val());
+            $(colors[o].slider.handle1).css("background-image","none");
         }
         return carray;
 
