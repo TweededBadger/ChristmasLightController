@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+
+    <![endif]-->
+
+    <style>
+        * {
+            margin:0;
+            padding: 0;
+        }
+        body {
+            overflow: hidden;
+        }
+        #overlay {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            background-color: rgba(0,0,0,0.8);
+            width: 1920px;
+            height:1080px;
+            text-align: center;
+            display: none;
+            color: #ffffff;
+        }
+        #overlay h1 {
+            margin-top: 130px;
+            font-size: 100px;
+        }
+
+        .graphbar {
+            width: 270px;
+            display: inline-block;
+            font-size: 40px;
+            font-weight: bold;
+            color: #ffffff;
+            margin: 0px 25px;
+
+        }
+        .graphbar .outerbar{
+            width: 100%;
+            height: 600px;
+            background-color: #222222;
+            /*border: 1px solid red;*/
+            position: relative;
+        }
+        .graphbar .innerbar{
+            width: 100%;
+            height: 0%;
+            background-color: green;
+            position: absolute;
+            bottom: 0px;
+        }
+
+        #debug {
+            position: absolute;
+            width: 400px;
+            height: 100px;
+            font-size: 20px;
+            background-color: #ffffff;
+            top: 0px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<video width="1920" height="1080" id="vid" controls="">
+<!--<video width="1200" height="720" id="vid" controls="">-->
+    <source src="videos/Start.mp4" type="video/mp4">
+</video>
+<div id="overlay">
+    <h1 class="text-center">CHOOSE THE NEXT MOVE</h1>
+    <div id="graphs">
+
+    </div>
+</div>
+<div id="debug">TEST</div>
+
+<script src="js/jquery-2.0.3.js"></script>
+<script src="js/socketio.js"></script>
+<script src="bower_components/cookies-js/src/cookies.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.min.js"></script>
+<script>
+
+    var vid = $('#vid').get(0);
+
+    var triggered = false;
+
+    var options = [
+                [1,2,3,4],
+                [5,7],
+                [5,7],
+                [1,2,4],
+                [5,7],
+                [],
+                [],
+                []
+    ];
+    var triggertimes = [44,53,60,6,71,1,1,1];
+    //var triggertimes = [2,2,2,2,2,2,2,2];
+    var videos = ["Start", "Leave","Persist","Sympathize","Save Shaun","Do nothing","Do something","Gun"];
+    var currentvid = 0;
+    var votes = [0,3,2,1,0,0,0,0];
+    var triggertime = triggertimes[currentvid];
+    var votingallow = false;
+
+
+    var socket;
+    init = function() {
+        initSocket();
+        //setupListeners();
+        vid.volume = 0.8;
+        vid.src = getVideoName(currentvid);
+        vid.play();
+            videvents();
+        buildGraph();
+    }
+
+    tick = function() {
+        if (vid) {
+            $("#debug").html(vid.currentTime);
+            if (!triggered && vid.currentTime > triggertime) {
+                triggered = true;
+                trigger();
+            }
+        }
+    }
+
+    setInterval(tick,
+//    3000);
+            1000/30);
+
+    videvents = function() {
+        vid.addEventListener("progress",function(e){
+
+
+        });
+        vid.addEventListener("ended",function(e){
+
+            if (options[currentvid].length >0 ){
+                $("#overlay").fadeOut();
+                currentvid = checkVotes();
+                console.log("New vid: "+currentvid)
+                vid.src = getVideoName(currentvid);
+                vid.play();
+                triggered = false;
+                votingallow = false;
+                triggertime = triggertimes[currentvid];
+                //videvents();
+            }
+        });
+    }
+    getVideoName = function(id) {
+        return "videos/"+videos[id]+".mp4";
+    }
+    clearVotes = function() {
+        votes = [0,0,0,0,0,0,0,0];
+    }
+
+    buildGraph = function() {
+        var str = "";
+        for (var o in videos) {
+            str += "<div class='graphbar' id='option"+o+"'><div class='outerbar'><div class='innerbar'></div></div> "+videos[o]+"</div> ";
+        }
+        $("#graphs").html(str);
+    }
+
+    updategraphs = function(clear) {
+        var votecount = 0;
+        for (var o in votes) {
+            votecount += votes[o];
+        }
+        for (var i in votes) {
+            var numvotes = votes[i];
+            if (numvotes > 0 || clear) {
+                var percent = (numvotes/votecount)*100;
+                if (!percent) percent = 0;
+                console.log(percent);
+//                $("#option"+i+" .innerbar").css("height",percent+"%");
+                $("#option"+i+" .innerbar").stop().animate(
+                        {
+                            "height":percent+"%"
+                        }
+                );
+            }
+
+
+        }
+    }
+    amendGraph = function() {
+        $(".graphbar").hide();
+        for (var o in options[currentvid]) {
+            $("#option"+options[currentvid][o]).show();
+        }
+    }
+
+    trigger = function() {
+        if (options[currentvid].length >0 ){
+            amendGraph();
+            clearVotes();
+            updategraphs(true);
+            askForVotes();
+            $("#overlay").fadeIn();
+           }
+    }
+    askForVotes = function() {
+        var vidoptions = options[currentvid];
+        var optionstosend = [];
+        votingallow = true;
+
+        for (var o in vidoptions) {
+            var index = vidoptions[o];
+            optionstosend.push({
+                index:index,
+                text:videos[index].toUpperCase()
+            })
+        }
+
+        var sendobj = {
+            type:"voteoptions",
+            data:optionstosend
+        };
+        socket.emit('masterdata',sendobj);
+        console.log(optionstosend);
+    }
+
+    checkVotes = function() {
+        var highestvotes = 0;
+        var highestvotesid = 0;
+
+        for (var o in votes) {
+                if (votes[o] > highestvotes) {
+                    highestvotesid = o;
+                    highestvotes = votes[o];
+                }
+            }
+
+        return highestvotesid;
+    }
+    castVote = function(id) {
+        votes[id]++;
+
+    }
+    initSocket = function() {
+        socket = io.connect('/');
+        socket.on('pingback', function (data) {
+            currentMode = data.mode;
+            console.log(data);
+            socket.emit('registermaster');
+        });
+        socket.on("userevent", function (data) {
+           console.log(data);
+            switch (data.type){
+                case "videovote":
+                        if (votingallow) {
+                            castVote(data.data);
+                            updategraphs();
+                        }
+                    break;
+
+
+            }
+        });
+    }
+
+
+
+
+
+    $(document).ready(init);
+
+</script>
+
+</body>
+</html>

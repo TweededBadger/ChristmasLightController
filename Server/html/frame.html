@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+        * {
+            margin:0;
+            padding: 0;
+        }
+        body {
+            overflow: hidden;
+        }
+        #mainframe {
+            width: 1920px;
+            height: 1080px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<iframe id="mainframe" src="">
+
+</iframe>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="js/jquery-2.0.3.js"></script>
+<script src="js/socketio.js"></script>
+<script src="bower_components/cookies-js/src/cookies.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.min.js"></script>
+<script>
+    init = function() {
+        initSocket();
+    }
+
+    initSocket = function() {
+        socket = io.connect('/');
+        socket.on('pingback', function (data) {
+            currentMode = data.mode;
+            console.log(data);
+            socket.emit('registermaster');
+
+            changeMode(data.mode);
+
+        });
+
+        socket.on('changemode', function (data) {
+
+            changeMode(data.mode);
+
+        });
+
+
+
+    }
+    changeMode = function(mode) {
+        switch (mode){
+            case 'quiz':
+                $("#mainframe").attr("src","quiz.html");
+            break;
+            case 'vw':
+                $("#mainframe").attr("src","videovw.html");
+            break;
+            case 'rain':
+                $("#mainframe").attr("src","videohr.html");
+                break;
+            case 'joystick':
+                $("#mainframe").attr("src","videowd.html");
+            break;
+            case 'start':
+                $("#mainframe").attr("src","welcome.html");
+                break;
+            case 'end':
+                $("#mainframe").attr("src","end.html");
+                break;
+        }
+    }
+
+    $(document).ready(init);
+
+</script>
+
+</body>
+</html>

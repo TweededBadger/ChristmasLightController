@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+        * {
+            margin:0;
+            padding: 0;
+        }
+        body {
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<video width="1920" height="1080" id="vid">
+    <source src="vw.mp4" type="video/mp4">
+</video>
+
+<script src="js/jquery-2.0.3.js"></script>
+<script>
+    $(document).ready(function(){
+        $('#vid').get(0).play();
+        $('#vid').get(0).volume = 0.3;
+    });
+
+</script>
+
+</body>
+</html>

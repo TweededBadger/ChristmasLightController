@@ -1,0 +1,198 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+    <style>
+        * {
+
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+            background-color: #BBB;
+        }
+
+        #info {
+            position: absolute;
+            top: 0px;
+            width: 100%;
+            /*padding                : 5px;*/
+            text-align: center;
+        }
+
+        #info a {
+            color: #66F;
+            text-decoration: none;
+        }
+
+        #info a:hover {
+            text-decoration: underline;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+        }
+
+        #start {
+            width: 100%;
+            height: 200px;
+            font-size: 50px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container"></div>
+<div id="info">
+    <h4 id="playerinfo"></h4>
+    <span id="result"></span>
+
+    <div>
+        <button id="start">START</button>
+    </div>
+</div>
+<script src="js/virtualjoystick.js"></script>
+
+<script src="js/jquery-2.0.3.js"></script>
+<script src="js/howler.js"></script>
+<script src="js/socketio.js"></script>
+
+
+<script>
+    //createjs.Sound.addEventListener("fileload", createjs.proxy(this.loadHandler, this));
+    //createjs.Sound.registerSound("Game-Death.mp3|Game-Death.ogg", "death");
+
+    var sound = new Howl({
+        urls:['death.mp3', 'death.ogg', 'death.wav']
+    });
+    var laugh = new Howl({
+        urls:['laugh.mp3', 'laugh.ogg', 'laugh.wav']
+    });
+    $("#start").click(function () {
+        laugh.play();
+        start();
+        $("#start").hide();
+    });
+    //                    function loadHandler(event) {
+    //                        // This is fired for each sound that is registered.
+    //                        var instance = createjs.Sound.play("death");  // play using id.  Could also use full sourcepath or event.src.
+    //                        instance.addEventListener("complete", createjs.proxy(this.handleComplete, this));
+    //                        instance.volume = 0.5;
+    //                    }
+
+    var userid = 0;
+
+    var count = 0;
+    var testx = 0;
+    var testy = 0;
+
+    function start() {
+    console.log("touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
+    var joystick = new VirtualJoystick({
+        container:document.getElementById('container'),
+        mouseSupport:true
+    });
+    setInterval(function () {
+
+        count++;
+
+        if (count>100) {
+            testx = Math.random()*200-100;
+            testy = Math.random()*200-100;
+            count = 0;
+            console.log(testx);
+        }
+
+
+//                                var outputEl        = document.getElementById('result');
+//                                outputEl.innerHTML        = '<b>Result:</b> '
+//                                        + ' dx:'+joystick.deltaX()
+//                                        + ' dy:'+joystick.deltaY()
+//                                        + (joystick.right()        ? ' right'        : '')
+//                                        + (joystick.up()        ? ' up'                : '')
+//                                        + (joystick.left()        ? ' left'        : '')
+//                                        + (joystick.down()        ? ' down'         : '');
+
+        socket.emit('data', {
+            x:joystick.deltaX(),
+            y:joystick.deltaY()
+//            x:testx,
+//            y:testy
+        });
+
+    }, 1 / 30 * 1000);
+
+    var socket = io.connect('http://192.168.0.220');
+
+    socket.on('positions', function (data) {
+        console.log(data);
+    });
+
+    socket.on('status', function (data) {
+        console.log(data);
+
+        if (data.status == 1) {
+            $("body").css({backgroundColor:'red'});
+            sound.play();
+        }else  if (data.status == 2) {
+            $("body").css({backgroundColor:'green'});
+        } else {
+            $("body").css({backgroundColor:'white'});
+        }
+    });
+    socket.on('userid', function (data) {
+        userid = data;
+        $("#playerinfo").html("ID: " + userid);
+
+    });
+
+    }
+
+    function setCookie(c_name,value) {
+        var exdate=new Date();
+        exdate.setDate(exdate.getDate() + 10);
+        var c_value=escape(value);// + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+        document.cookie=c_name + "=" + c_value;
+    }
+
+    function getCookie(c_name)
+    {
+        var c_value = document.cookie;
+        var c_start = c_value.indexOf(" " + c_name + "=");
+        if (c_start == -1)
+        {
+            c_start = c_value.indexOf(c_name + "=");
+        }
+        if (c_start == -1)
+        {
+            c_value = null;
+        }
+        else
+        {
+            c_start = c_value.indexOf("=", c_start) + 1;
+            var c_end = c_value.indexOf(";", c_start);
+            if (c_end == -1)
+            {
+                c_end = c_value.length;
+            }
+            c_value = unescape(c_value.substring(c_start,c_end));
+        }
+        return c_value;
+    }
+
+</script>
+</body>
+</html>
+
+

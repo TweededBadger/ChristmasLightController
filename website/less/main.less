@@ -1,0 +1,249 @@
+// Core variables and mixins
+@import "variables.less";
+@import "mixins.less";
+@import "bootstrapoverides.less";
+
+@gradheight: 6em;
+
+body { //  margin: 1em;
+  background-color: #cccccc;
+}
+
+#sliders {
+  width: 100%;
+}
+
+#container {
+  width: 95%;
+  padding-top: @gradheight + 0.5em;
+  padding-bottom: 2em;
+  margin:0 auto;
+  position:relative;
+
+  @media (min-width: @screen-sm) {
+    width: 300px;
+    left: -230px;
+    padding-top: 0.5em;
+  }
+  @media (min-width: @screen-md) {
+    width:400px;
+  left: -300px;;
+  }
+  @media (min-width: @screen-lg) {
+    width:450px;
+    left: -375px;
+  }
+}
+
+#container.fixed {
+  padding-top: @gradheight + 0.5em;
+}
+
+#gradientHolder {
+  position: fixed;
+  top: 0;
+  width: 95%;
+  height: @gradheight;
+  z-index: 5;
+
+  @media (min-width: @screen-sm) {
+    position:inherit;
+    width: 300px;
+    margin-bottom: 0.5em;
+  }
+  @media (min-width: @screen-md) {
+    width:400px;
+  }
+  @media (min-width: @screen-lg) {
+    width:450px;
+  }
+}
+
+#gradientHolder.fixed {
+  position: fixed;
+
+}
+
+.canvasHolder {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  z-index: 5;
+
+}
+
+
+
+
+#testCanvas {
+  width: 100%;
+  height: 100%;
+/*max-width: 600px;*/ //  margin-left: 27px;
+}
+#send_button_holder {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 6;
+
+}
+#btn_process {
+  display: block;
+  margin: 0 auto;
+  margin-top: @gradheight/3;
+  background-color: rgba(255,255,255,0.2);
+}
+
+
+
+#slider {
+  width: 200px;
+}
+
+.sliderholder {
+  border: 1px solid #cccccc;
+  padding-bottom: 1em;
+  padding-top: 1.5em;
+  margin-bottom: 0.5em;
+  position: relative;
+  text-align: center;
+  background-color: #ffffff;
+
+
+
+}
+.sliderholder .triangle {
+  position: absolute;
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  border-width: 4em 4em 0 0;
+  border-color: #007bff transparent transparent transparent;
+  top: 0;
+}
+
+.slider {
+  width: 90% !important;
+  margin: 0 auto;
+  display: block;
+  margin-top: 1em;
+}
+.sliderholder .minicolors {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.sliderholder .delete {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.sliderholder .copy {
+  position: absolute;
+  top: 0;
+  right: 2em;
+}
+
+.sliderholder .minicolors-input {
+  height: 28px;
+  width: 25px;
+  display: inline-block;
+  padding-left: 26px;
+  border: none;
+}
+.sliderholder .minicolors-swatch {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+.sliderholder  .minicolors-theme-default.minicolors {
+  width: 2em;
+  height: 2em;
+}
+.sliderholder  .minicolors-position-left .minicolors-panel {
+//  left: -240%;
+}
+
+.slider-handle {
+  width: 30px;
+  height: 30px;
+}
+
+.slider.slider-horizontal .slider-handle {
+  margin-left: -15px;
+  margin-top: -10px;
+}
+
+#btn_add {
+  width: 50%;
+  margin: 0 auto;
+  display: block;
+}
+
+#streamframeholder {
+  width: 100%;
+  height: 0px;
+  margin: 0 auto 0.5em auto;
+  position: relative;
+  padding: 66% 0 0 0;
+
+
+  @media (min-width: @screen-sm) {
+    width: 449px;
+    position: absolute;
+    left: 310px;
+    height: 368px;
+    padding: 0;
+  }
+@media (min-width: @screen-md) {
+  width:590px;
+height: 471px;
+left: 410px;
+padding: 0;
+}
+@media (min-width: @screen-lg) {
+left:460px;
+width:730px;
+height: 580px;
+padding: 0;
+}
+
+}
+
+#streamframeholder.fixed {
+
+
+  @media (min-width: @screen-sm) {
+    position: fixed;
+    left: auto;
+    margin-left: 310px;
+    top: 0;
+  }
+@media (min-width: @screen-md) {
+position: fixed;
+  left: auto;
+  margin-left: 410px;
+  top: 0;
+}
+@media (min-width: @screen-lg) {
+  position: fixed;
+  left: auto;
+  margin-left: 460px;
+  top: 0;
+}
+
+
+
+}
+#streamframe {
+
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+}

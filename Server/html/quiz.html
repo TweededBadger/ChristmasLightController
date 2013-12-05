@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        body {
+            margin-top: 500px;
+            background: url("image/quizbg.png") no-repeat;
+            width: 1920px;
+            height: 1080px;
+            overflow: hidden;
+            color: #ffffff;
+        }
+        #scores {
+            margin-top: 1em;
+        }
+        #avatars {
+            position: relative;
+        }
+
+        .playeravatar {
+            /*background-image: url("image/avatars/1.png");*/
+            background-repeat: no-repeat;
+            width: 139px;
+            height: 143px;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            background-size: 100%;
+        }
+        .playeravatar .mouth{
+            background-image: url("image/avatars/mouth.png");
+            background-repeat: no-repeat;
+            /*background-position: 0 -8px;*/
+            width: 37px;
+            height: 12px;
+            position: absolute;
+            top: 96px;
+            left: 52px;
+            background-size: 100%;
+        }
+        .playeravatar .username {
+            width: 100%;
+            text-align: center;
+            margin-top: 135px;
+            font-size: 30px;
+            font-weight: bold;
+        }
+        .playeravatar .lives {
+            display: none;
+
+        }
+
+        #question {
+            text-align: center;
+            color: #ffffff;
+            font-size: 50px;
+            height: 150px;
+            padding: 0 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 id="question">Get ready!!</h1>
+
+<div id="avatars"></div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="js/jquery-2.0.3.js"></script>
+    <script src="js/howler.js"></script>
+<script src="js/socketio.js"></script>
+<script src="bower_components/cookies-js/src/cookies.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.min.js"></script>
+<script>
+
+    var players = [];
+    init = function() {
+        initSocket();
+
+
+        var sound = new Howl({
+            urls:['./sounds/coke.mp3']
+        });
+        sound.loop(true);
+
+        sound.play();
+        sound.volume(0.6);
+
+    }
+
+    User = function(userdata) {
+        this.lives = userdata.data.quizlives;
+        this.initials = userdata.initials;
+        this.id = userdata.id;
+        this.avatar;
+        this.avatarid = 0;
+    }
+
+    containsUser = function(array, obj) {
+        var i = array.length;
+        while (i--) {
+            if (array[i].id === obj.id) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    refreshAll = function() {
+
+        var alivetotal = 0;
+        var deadtotal = 0;
+        console.log(players);
+        for (var index in players) {
+            var p = players[index];
+            console.log(index);
+            if (p.lives > 0) {
+                alivetotal++;
+            } else {
+                deadtotal++;
+            }
+        }
+        console.log(alivetotal);
+        console.log(deadtotal);
+
+
+        var alivecount = 0;
+        var deadcount = 0;
+        var width = $("body").width();
+
+
+        for (var index in players) {
+            var p = players[index];
+
+            if (p.lives > 0) {
+//                $(p.avatar).css('top',alivecount * 20);
+//                $(p.avatar).css('left',0);
+
+                $(p.avatar).stop().animate({
+                    top:0,
+                    left: ((width/2) + alivecount * 145) - (alivetotal*145/2)
+                });
+
+                if (p.avatar) p.avatar.find(".mouth").css("background-position-y",0);
+
+                alivecount++;
+            } else {
+//                $(p.avatar).css('top',deadcount * 20);
+//                $(p.avatar).css('left',300);
+
+                $(p.avatar).stop().animate({
+                    top:200,
+                    left:((width/2) + deadcount * 145) - (deadtotal*145/2)
+                });
+                deadcount++;
+                if (p.avatar)  p.avatar.find(".mouth").css("background-position-y",-11);
+            }
+
+        }
+
+    }
+
+    removeUser = function(id) {
+        var playertoremove;
+        var indextoremove;
+        for (var index in players) {
+            var p = players[index];
+            if (p.id == id) {
+                playertoremove = p;
+                indextoremove = index;
+            }
+        }
+
+        if (playertoremove) {
+            playertoremove.avatar.remove();
+            delete playertoremove;
+            players.splice(indextoremove,1);
+        }
+        refreshAll();
+
+    }
+
+    createNewAvatar = function(user) {
+        var html = "<div id='avatar"+user.id+"' class='playeravatar'><div class='mouth'></div><div class='username'>"+user.initials+"</div><span class='lives'></span> </div> ";
+        $("#avatars").append(html);
+        return $("#avatar"+user.id);
+    }
+
+    initSocket = function() {
+        socket = io.connect('/');
+        socket.on('pingback', function (data) {
+            currentMode = data.mode;
+            console.log(data);
+            socket.emit('registermaster');
+        });
+
+        socket.on("userleft",function(data){
+            console.log("User left "+ data);
+            removeUser(data);
+        });
+
+
+        socket.on("userdata",function(data){
+            console.log(data);
+            var scorestr = "";
+            for (var uindex in data) {
+                var user = data[uindex];
+
+                var u = new User(user);
+                var localplayerindex = containsUser(players,u);
+                if (localplayerindex == -1) {
+                    players.push(u);
+                    u.avatar = createNewAvatar(u);
+                    u.lives  = user.data.quizlives;
+                    u.initials = user.initials;
+                    u.avatarid = user.data.avatarid;
+
+                    u.avatar.css("background-image","url(image/avatars/"+user.data.avatarid+".png)");
+
+
+
+                } else {
+                    players[localplayerindex].initials = user.initials;
+                    players[localplayerindex].lives = user.data.quizlives;
+                    if (players[localplayerindex].avatarid != user.data.avatarid) {
+                        players[localplayerindex].avatarid = user.data.avatarid;
+                        players[localplayerindex].avatar.css("background-image","url(image/avatars/"+user.data.avatarid+".png)");
+
+                    }
+                    players[localplayerindex].avatar.find(".username").html(user.initials);
+                    players[localplayerindex].avatar.find(".lives").html(" LIVES: "+user.data.quizlives);
+
+
+
+                    }
+
+                //$.inArray(value, array)
+//                var livestr = "";
+//                for (var i = 0; i < user.data.quizlives; i++) {
+//                    livestr += '<span class="glyphicon glyphicon-heart"></span> ';
+//                }
+//                for (var j = 0; j < 3-user.data.quizlives; j++) {
+//                    livestr += '<span class="glyphicon glyphicon-heart-empty"></span> ';
+//                }
+//
+//                scorestr += "<div class='panel panel-default'><div class='panel-body'>"+user.name+": "+livestr+"</div></div>"
+            }
+
+            refreshAll();
+            $("#scores").html(scorestr);
+        });
+        socket.on("quizwinner",function(data){
+            if (data) {
+                $("#question").html(data.initials + " is the winner!");
+            } else {
+                $("#question").html("No winner this round");
+            }
+        });
+
+        socket.on('question', function (data) {
+            console.log(data.question);
+            $("#question").html(data.question);
+
+        });
+
+
+
+
+    }
+
+    $(document).ready(init);
+</script>
+
+</body>
+</html>

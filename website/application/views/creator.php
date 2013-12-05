@@ -8,6 +8,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/slider.css" rel="stylesheet">
     <link href="css/jquery.minicolors.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
     <script type='text/javascript' src="js/modernizr.js"></script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -18,64 +19,34 @@
     <![endif]-->
 
     <style>
-        body {
-            margin: 1em;
-        }
-        #sliders {
-            width: 100%;
-        }
-        #container {
-            width: 300px;
-        }
-        #slider {
-            width: 200px;
-        }
-        .slider {
-            width: 75% !important;
-        }
-        #testCanvas {
-            width: 75%;
-/*max-width: 600px;*/
-margin-left: 27px;
-        }
-        
-        .minicolors-theme-default .minicolors-input {
-            height: 30px;
-            width: 0px;
-            display: inline-block;
-            padding-left: 26px;
-            border:none;
-        }
-        
-        .slider-handle {
-            width: 30px;
-            height: 30px;
-        }
-        .slider.slider-horizontal .slider-handle {
-                margin-left: -15px;
-                margin-top: -10px;
-            }
+
     </style>
 </head>
 
 
 <body>
     <div id="container">
-<div class="canvasHolder">
-    <canvas id="testCanvas" width="240" height="40"></canvas>
-</div>
-<div id="sliders">
+        <div id="streamframeholder">
+        <iframe id="streamframe" width="480" height="302" src="http://www.ustream.tv/embed/16427450?ub=85a901&amp;lc=85a901&amp;oc=ffffff&amp;uc=ffffff&amp;v=3&amp;wmode=direct" scrolling="no" frameborder="0" style="border: 0px none transparent;">    </iframe>
+        </div>
+
+        <div id="gradientHolder">
+            <div class="canvasHolder">
+            <canvas id="testCanvas" width="240" height="40"></canvas>
+        </div>
+        <div id="send_button_holder">
+            <button id="btn_process" class="btn" >SEND COLOURS</button>
+        </div>
+        </div>
+        <div id="sliders">
 
 </div>
 <div>
-    <button id="btn_add">+</button>
+    <button id="btn_add" class="btn" >+</button>
 </div>
 
 
-<div>
-    <button id="btn_process">MAGIC!</button>
-</div>
-        
+
         </div>
 
 <!--<iframe width="720" height="437" src="http://www.ustream.tv/embed/16427450?v=3&amp;wmode=direct" scrolling="no" frameborder="0" style="border: 0px none transparent;">    </iframe>-->
@@ -131,6 +102,7 @@ margin-left: 27px;
     var rect;
     var count = 0;
     var colors = [];
+    var theLoc;
     init = function() {
 
         
@@ -148,15 +120,41 @@ margin-left: 27px;
         
         $("#sliders").delegate("button", "click", function (event) {
             
-            
+            var type = $(this).data("type");
             var id = $(this).data("id");
-            
-            
-           addcolour(null,$("#cp"+id).val());
-        
+            switch (type) {
+                case "delete":
+                    removeColour(id);
+                break;
+                case "copy":
+                    addcolour(null,$("#cp"+id).val(),id);
+                break
+            }
         });
-    }
 
+
+//        theLoc = $('#sliders').position().top;
+        theLoc = 5;
+        $(window).scroll(function() {
+            if(theLoc >= $(window).scrollTop()) {
+                //if($('#gradientHolder').hasClass('fixed')) {
+                    $('#gradientHolder').removeClass('fixed');
+                    $('#container').removeClass('fixed');
+                    $('#streamframeholder').removeClass('fixed');
+                //}
+            } else {
+                //if(!$('#gradientHolder').hasClass('fixed')) {
+                    $('#gradientHolder').addClass('fixed');
+                    $('#container').addClass('fixed');
+                    $('#streamframeholder').addClass('fixed');
+                //}
+            }
+        });
+
+
+
+    }
+    var intensity = 0.3;
     processColor = function() {
         rect.cache(0, 0, 240, 100);
         var data = rect.cacheCanvas.getContext("2d").getImageData(0, 0, 240, 1);
@@ -165,12 +163,10 @@ margin-left: 27px;
 
         for (var i = 0; i < 240; i++) {
 
-
-
-            var r = data.data[i*4];
-            var g = data.data[(i*4)+1];
-            var b = data.data[(i*4)+2];
-            var a = data.data[(i*4)+3];
+            var r = Math.round(data.data[i*4]*intensity);
+            var g = Math.round(data.data[(i*4)+1]*intensity);
+            var b = Math.round(data.data[(i*4)+2]*intensity);
+            var a = Math.round(data.data[(i*4)+3]*intensity);
             //console.log( r + "," + g + "," + b + "," + a);
 
             outstring += "i"+(i+1)+"r"+r+"g"+g+"b"+b;
@@ -179,36 +175,72 @@ margin-left: 27px;
         console.log(outstring);
         
         $.post( "data/set?val="+outstring, function() {
-            alert( "success" );
+            //alert( "success" );
           });
     }
-
-    addcolour = function(e,colorvalue) {
+    removeColour = function(id) {
+        var toremove;
+        for (var o in colors) {
+            console.log(colors[o]);
+            console.log(o);
+            if (colors[o].id == id) toremove = o;
+        }
+        colors.splice( toremove, 1 );
+        $("#h"+id).remove();
+        slide();
+    }
+    addcolour = function(e,colorvalue,copyid) {
         var id = "slider"+count;
         var cid = "cp"+count;
         var pid = "p"+count;
+        var hid = "h"+count;
         var startColor = "#000000";
         if (colorvalue) {
             startColor = colorvalue;
         } else {
             startColor = tinycolor.random().toHexString();
             console.log(tinycolor.random().toHexString());
-            
         }
         
         $.minicolors.defaults.defaultValue = startColor;
         
         console.log(startColor);
-        $( "#sliders" ).append( $( '<div class="sliderholder"><input id="'+cid+'" data-defaultvalue="'+startColor+'"/><input id="'+id+'" data-slider-id="the'+id+'" type="text" data-slider-tooltip="hide" data-slider-min="0" data-slider-max="240" data-slider-step="1" data-slider-value="0"/><button class="btn" data-id='+count+' ><span class="glyphicon glyphicon-book"></span></button></div>' ) );
-        var s = $("#"+id).slider().on('slide', slide).data('slider');
 
-        var cp = $("#"+cid).minicolors();
+        sliderhtml = '<div class="sliderholder"  id="'+hid+'" >' +
+                '<div class="triangle"></div> ' +
+                '<button class="btn copy" data-id='+count+' data-type="copy" ><span class="glyphicon glyphicon-book"></span></button>' +
+                '<input id="'+cid+'" data-defaultvalue="'+startColor+'"/>' +
+                '<button class="btn delete" data-id='+count+' data-type="delete" ><span class="glyphicon glyphicon-remove"></span></button>' +
+                '<div><input id="'+id+'" data-slider-id="the'+id+'" type="text" data-slider-tooltip="hide" data-slider-min="0" data-slider-max="240" data-slider-step="1" data-slider-value="0"/></div></div>'
+
+        if (copyid) {
+            $( sliderhtml).insertAfter( "#h"+copyid );
+        } else {
+            $( "#sliders" ).append( $( sliderhtml) );
+            window.scrollTo(0,document.body.scrollHeight);
+        }
+
+
+        //$( "<p>Test</p>" ).insertAfter( ".inner" );
+
+
+
+        var s = $("#"+id).slider({value:Math.random()*255}).on('slide', slide).data('slider');
+
+        var cp = $("#"+cid).minicolors({
+                change: function(hex, opacity) {
+            //console.log(hex + ' - ' + opacity);
+                    slide();
+            }  }
+        );
 
 
 
         var c = new SColor();
         c.slider = s;
+        c.holder = $("#"+hid);
         c.colorpicker = cp;
+        c.id = count;
         colors.push(c);
         count++;
         
@@ -244,6 +276,11 @@ margin-left: 27px;
             carray.push(val);
             $(colors[o].slider.handle1).css("background-color",colors[o].colorpicker.val());
             $(colors[o].slider.handle1).css("background-image","none");
+
+            $(colors[o].holder).find(".triangle").css("border-color",colors[o].colorpicker.val() + " transparent transparent transparent");
+
+       // .sliderholder .triangle
+
         }
         return carray;
 
@@ -259,4 +296,4 @@ margin-left: 27px;
 
 </script>
 </body>
-</html>v
+</html>

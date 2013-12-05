@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.css" rel="stylesheet" media="screen">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <style>
+
+
+
+
+        body, html {
+            height: 100%;
+        }
+        body {
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+            /*background-color: #BBB;*/
+
+            /*background-image: url("image/quizbg.gif");*/
+            background-repeat: repeat-y;
+            background-size: 100%;
+
+            color: #929395;
+
+        }
+        #everything {
+            background-repeat: repeat-y;
+            background-size: 100%;
+            min-height: 100%;
+        }
+        #sitecontainer {
+            margin: 1em;
+        }
+        #container {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            position: absolute !important;
+            top: 0px;
+            left: 0px;
+            display: none;
+            
+            background-image: url("image/walking_d_thumb.png");
+            background-size: 80%;
+            background-repeat: no-repeat;
+            background-position: center center;
+
+        }
+
+        #container #instructions{
+            position: absolute;
+            bottom: 2%;
+            width: 100%;
+            font-size: 2em;
+
+        }
+
+        .qbutton {
+            width: 100%;
+            height: 4em;
+            margin-bottom: .5em;
+        }
+        #questionholder {
+            display: none;
+            color: white;
+        }
+
+        .progress {
+            width: 100%;
+        }
+
+
+        .avatar {
+            background-image: url("image/avatars/1.png");
+            background-repeat: no-repeat;
+            background-size: 100%;
+            width: 100px;
+            height: 110px;
+            display: inline-block;
+            position: relative;
+        }
+
+        .avatar .mouth{
+            background-image: url("image/avatars/mouth.png");
+            background-repeat: no-repeat;
+            /*background-position: 0 -8px;*/
+            width: 32px;
+            height: 10px;
+            position: absolute;
+            top: 64px;
+            left: 34px;
+            background-size: 100%;
+        }
+
+        #avatarHolder {
+            text-align: center;
+            display: none;
+            color: #ffffff;
+        }
+
+        #headerimage {
+            width: 100%;
+        }
+
+        #btn_test {
+            position: absolute;
+            top: 0px;
+        }
+
+        #detailsform {
+            display: none;
+        }
+    #news img {
+        width: 100%;
+    }
+    #news,#vwquiz {
+        display: none;
+        color: #000000;
+
+    }
+
+    #vwthanks ,#rain{
+        display: none;
+    }
+    #rain{
+         display: none;
+         color: #ffffff;
+        margin-top: -3em;
+     }
+
+    #detailsform input[type=text]{
+
+    }
+        #detailsform {
+            font-family: georgia;
+        }
+        #detailsform h4 {
+            font-weight: 200;
+            font-style: italic;
+            line-height: 1.4em;
+        }
+    #detailsform input[type=text] {
+        background-color: #7d6aaa;
+        color: #ffffff;
+        border-radius: 0;
+        border: none;
+    }
+    #detailsform button {
+        background-color: #ff0198;
+       color: #ffffff;
+        border-radius: 0;
+        border: none;
+        font-style: italic;
+        font-size: 1.5em;
+        padding: 3px 5px;
+    }
+
+        #end h3{
+            font-weight: 200;
+            font-style: italic;
+            line-height: 1.4em;
+        }
+        #end {
+            text-align: center;
+            display: none;
+        }
+        #end button{
+            width: 50%;
+            padding: 1em;
+        }
+
+        .progress .progress-bar {
+            -webkit-transition: none;
+            -moz-transition: none;
+            -ms-transition: none;
+            -o-transition: none;
+            transition: none;
+        }​
+
+
+
+
+
+
+    </style>
+</head>
+<body>
+<div id="everything">
+
+<img id="headerimage" src="image/pearl_header.png">
+
+<!--<button id="btn_test">TEST</button>-->
+<div id="container">
+
+    <div id="instructions" class="text-center">Use your thumb to control the character</div>
+</div>
+
+
+<div id="news">
+    <img src="image/NEWS.jpg">
+</div>
+
+<div id="sitecontainer">
+<div id="info">
+    <span id="result"></span>
+</div>
+<form id="detailsform"  role="form">
+
+    <div>
+        <h4 class="text-center">PLEASE ENTER YOU INITIALS TO BEGIN PEARL & DEAN'S INTERACTIVE EXPERIENCE</h4>
+    </div>
+    <!--<div class="form-group">-->
+        <!--<label for="userName">User Name</label>-->
+        <!--<input type="text" class="form-control" id="userName" placeholder="Enter name" value="TEST USER">-->
+    <!--</div>-->
+    <input type="hidden" class="form-control" id="userName" value="TEST USER">
+
+    <div class="form-group">
+        <label for="userInitials">Initials</label>
+        <input type="text" class="form-control" id="userInitials" placeholder="Enter Initials" value="" maxlength="3">
+    </div>
+    <div class="form-group">
+        <label for="userInitials">E-mail Address (Optional)</label>
+        <input type="text" class="form-control" id="userEmail" placeholder="Enter E-mail" value="">
+    </div>
+
+    <div class="checkbox">
+    <label>
+    <input type="checkbox" value="">
+    Tick here to recieve details of more exciting offers & promotions from Pearl & Dean.
+    </label>
+    </div>
+
+    <div class="text-center">
+    <button type="submit" class="btn btn-default">continue</button>
+    </div>
+</form>
+
+
+<div id="avatarHolder">
+    <h2>Choose an avatar</h2>
+        <a href="#" class="avatar" style="background-image: url('image/avatars/1.png')" data-avatarid=1><div class="mouth"></div></a>
+        <a href="#" class="avatar" style="background-image: url('image/avatars/2.png')" data-avatarid=2><div class="mouth"></div></a>
+        <a href="#" class="avatar" style="background-image: url('image/avatars/3.png')" data-avatarid=3><div class="mouth"></div></a>
+        <a href="#" class="avatar" style="background-image: url('image/avatars/4.png')" data-avatarid=4><div class="mouth"></div></a>
+        <a href="#" class="avatar" style="background-image: url('image/avatars/5.png')" data-avatarid=5><div class="mouth"></div></a>
+        <a href="#" class="avatar" style="background-image: url('image/avatars/6.png')" data-avatarid=6><div class="mouth"></div></a>
+        <a href="#" class="avatar" style="background-image: url('image/avatars/7.png')" data-avatarid=7><div class="mouth"></div></a>
+        <a href="#" class="avatar" style="background-image: url('image/avatars/8.png')" data-avatarid=8><div class="mouth"></div></a>
+</div>
+<div id="questionholder">
+
+    <!--<div>Lives: <span id="livesholder"><span class="glyphicon glyphicon-heart"></span>-->
+        <!--<span class="glyphicon glyphicon-heart"></span>-->
+        <!--<span class="glyphicon glyphicon-heart-empty"></span></span> </div>-->
+    <!---->
+
+
+    <div class="progress progress-striped active ">
+        <div id="timebar" class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+
+        </div>
+    </div>
+
+    <div><h4 id="questionText" class="text-center">Awaiting Question..</h4></div>
+    <div id="answerButtons">
+    </div>
+</div>
+
+    <div id="vwquiz">
+
+    <div id="vwthanks">
+        <h1 class="text-center">Thanks for your entry! </h1>
+           <h2 class="text-center">Winners will be announced soon!</h2>
+    </div>
+
+
+    <form id="vwform"  role="form">
+        <h4 class="text-center">What was the name of the dog in the 1992 film?</h4>
+        <div class="radio">
+            <label>
+                <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+                Mozart
+            </label>
+        </div>
+        <div class="radio">
+            <label>
+                <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                Beethoven
+            </label>
+        </div>
+        <div class="radio">
+            <label>
+                <input type="radio" name="optionsRadios" id="optionsRadios3" value="option2">
+                Wagner
+            </label>
+        </div>
+
+        <!--<div class="checkbox small">-->
+            <!--<label>-->
+                <!--<input type="checkbox" value="">-->
+                <!--Tick here to accept the terms & conditions-->
+            <!--</label>-->
+        <!--</div>-->
+
+        <div class="checkbox small">
+            <input type="checkbox" value="">
+            Tick here to recieve more information from Volksvagen
+        </div>
+
+
+        <button type="submit" class="btn btn-default">Submit</button>
+
+
+    </form>
+
+    </div>
+
+
+    <div id="rain">
+        <h3 class="text-center">Choose from the options as they appear</h3>
+        <div id="rainanswerholder"></div>
+    </div>
+
+    <div id="end">
+        <h3 class="text-center">Please turn off your phone..</h3>
+        <button id="btn_ok" class="btn btn-defaultr">OK</button>
+    </div>
+
+</div>
+
+</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="js/jquery-2.0.3.js"></script>
+<script src="js/fastclick.js"></script>
+<script src="js/howler.js"></script>
+<script src="js/virtualjoystick.js"></script>
+<script src="js/quiz.js"></script>
+<script src="js/sounds.js"></script>
+<script src="js/socketio.js"></script>
+<script src="bower_components/cookies-js/src/cookies.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.min.js"></script>
+<script>
+
+
+    window.addEventListener('load', function() {
+        FastClick.attach(document.body);
+    }, false);
+
+    var sounds = new Sounds();
+
+    var socket;
+    var joystick;
+    var currentMode = "";
+    var quiz;
+    var latestuserdata;
+    var joystickinterval;
+    var startmode;
+    var submitted = false;
+
+
+    init = function() {
+        initSocket();
+        setupListeners();
+
+        setTimeout(function(){
+            // Hide the address bar!
+            window.scrollTo(0, 1);
+        }, 0);
+
+    }
+    setupSounds = function() {
+
+    }
+    newuserdata = function(data) {
+        latestuserdata = data;
+        //$("#result").html(latestuserdata.idnum)
+        if (quiz) quiz.checkUserStatus(data);
+    }
+
+    initSocket = function() {
+        socket = io.connect('/');
+        socket.on('pingback', function (data) {
+           startmode = data.mode;
+           console.log(data);
+
+
+            $("#detailsform").fadeIn();
+
+           var idcookie = Cookies.get("userid");
+           console.log("COOKIE: " + idcookie)
+           idcookie = undefined;
+           if (idcookie == undefined) {
+               socket.emit('newuser',function(data){
+                   console.log(data);
+                   Cookies.set("userid",data.id);
+                   newuserdata(data);
+
+                  // submitNameForm();
+               });
+           } else {
+               socket.emit('existinguser',idcookie,function(founduser,data){
+                   if (!founduser) {
+                       Cookies.set("userid",data.id);
+                       $("#userName").val(data.name == 'Anonymous' ? "" : data.name);
+                       $("#userInitials").val(data.initials == '' ? "" : data.initials);
+                       newuserdata(data);
+                       console.log(data);
+                   }else {
+                       console.log(data);
+                       newuserdata(data);
+                   }
+               });
+           }
+
+
+            //submitNameForm();
+
+        });
+
+        socket.on('changemode', function (data) {
+            if (submitted) {
+                changeMode(data.mode);
+            } else {
+                startmode = data.mode;
+            }
+        });
+        socket.on("userstatus", function (data) {
+            console.log(data);
+            newuserdata(data);
+        });
+
+
+        socket.on("status", function (data) {
+            newstatus(data);
+        });
+
+
+        socket.on('question', function (data) {
+            console.log(data);
+            if (quiz) quiz.newQuestion(data);
+        });
+        socket.on('answer', function (data) {
+            console.log(data);
+            if (quiz) quiz.answer(data);
+        });
+
+        socket.on("voteoptions", function (data) {
+            console.log(data);
+            createVideoVoteButtons(data);
+        });
+    }
+
+
+    createVideoVoteButtons = function(data) {
+        var qtext = "";
+        for (var o in data) {
+
+            var i = data[o].index;
+            var q = data[o].text;
+            qtext += '<div class="answer"><button type="button" class="qbutton btn btn-default ab' + i + '" data-aid=' + i + '>' + q + '</button></div>';
+
+
+        }
+        $("#rainanswerholder").html(qtext);
+        $("#rainanswerholder").fadeIn();
+    }
+
+    changeMode = function(mode) {
+
+        console.log("CHANGE MODE: "+mode);
+        if (!mode) return;
+
+        if (currentMode != mode){
+
+
+            $("#headerimage").attr("src", "image/shim.gif");
+            $("body").css("background-color", "#ffffff");
+            $("#everything").css("background-image", 'none');
+
+
+
+            currentMode = mode;
+
+            $("#questionholder").hide();
+            $("#container").hide();
+            $("#avatarHolder").hide();
+            $("#news").hide();
+            $("#vwquiz").hide();
+            $("#rain").hide();
+            $("#end").hide();
+
+            if (quiz) delete quiz;
+            if (joystick) {
+                joystick.destroy();
+                delete joystick;
+                joystick = undefined;
+                clearInterval(joystickinterval);
+            }
+
+            switch (mode){
+                case 'joystick':
+                    startJoystick();
+                    $("#container").show();
+                    $("#headerimage").attr("src", "image/wdshim.gif");
+                    $("body").css("background-color", "#000000");
+                    $("#everything").css("background-image", 'url("image/walking_d_bg.jpg")');
+
+                break;
+                case 'quiz':
+                    if(!quiz) startQuiz();
+                    $("#avatarHolder").show();
+                    $("#headerimage").attr("src", "image/quizheader.jpg");
+                    $("body").css("background-color", "#930202");
+                    $("#everything").css("background-image", 'url("image/quizbg.gif")');
+
+                break;
+
+                case 'vw':
+//                    $("#avatarHolder").show();
+                    $("#headerimage").attr("src", "image/win_volkwagen.jpg");
+                    $("body").css("background-color", "#ffffff");
+//                    $("#everything").css("background-image", 'url("image/quizbg.gif")');
+                    $("#vwquiz").show();
+                    break;
+
+
+                case 'start':
+//                    $("#avatarHolder").show();
+                    $("#headerimage").attr("src", "image/pearl_header.png");
+                    $("body").css("background-color", "#ffffff");
+
+                    $("#news").show();
+//                    $("#everything").css("background-image", 'url("image/quizbg.gif")');
+
+                    break;
+
+
+                case 'end':
+//                    $("#avatarHolder").show();
+                    $("#headerimage").attr("src", "image/pearl_header.png");
+                    $("body").css("background-color", "#ffffff");
+
+                    $("#end").show();
+                    sounds.playsound("phone");
+//                    $("#everything").css("background-image", 'url("image/quizbg.gif")');
+
+                    break;
+
+                case 'rain':
+//                    $("#avatarHolder").show();
+                    $("#headerimage").attr("src", "image/rainheader.jpg");
+                    $("body").css("background-color", "#000201");
+                    $("#rain").show();
+                    //$("#news").show();
+//                    $("#everything").css("background-image", 'url("image/quizbg.gif")');
+
+                    break;
+
+            }
+            $("#everything").fadeOut(0).fadeIn();
+
+
+        }
+    }
+
+    sendUserData = function(type,data) {
+        var senddata = {
+            type:type,
+            data:data
+        };
+        socket.emit('userdata',senddata);
+    }
+    sendUserEvent = function(type,data) {
+        var senddata = {
+            type:type,
+            data:data
+        };
+        socket.emit('userevent',senddata);
+    }
+    sendUserName = function(name,initials) {
+        var senddata = {
+            name:name,
+            initials:initials
+        };
+        socket.emit('userdetails',senddata);
+    }
+
+    setupListeners = function() {
+        $("#detailsform").submit(function(e){
+
+            sounds.playsound("click");
+
+            submitNameForm();
+            e.preventDefault();
+
+
+        });
+        $("#vwform").submit(function(e){
+
+            $("#vwform").hide();
+            $("#vwthanks").fadeIn();
+            e.preventDefault();
+
+        });
+
+        $("#btn_test").click(test);
+        $("#btn_ok").click(function(){
+            sounds.stopsound("phone");
+            $("#btn_ok").fadeOut();
+        });
+
+        $("#avatarHolder").delegate("a", "click", function (event) {
+            console.log($(event.target).data("avatarid"));
+
+            var senddata = {
+                type: "avatarid",
+                data:$(event.target).data("avatarid")
+            };
+            socket.emit('userdata',senddata);
+            $("#avatarHolder").hide();
+            $("#questionholder").show();
+
+        });
+
+
+        $("#rainanswerholder").delegate("button", "click", function (event) {
+            event.stopPropagation();
+            event.preventDefault();
+            $("#rainanswerholder").hide();
+            sounds.playsound("click");
+            var selectedAnswer = $(this).data('aid');
+
+            sendUserEvent('videovote',selectedAnswer);
+
+
+
+            });
+
+
+
+    }
+    test = function() {
+        socket.emit('test');
+    }
+    submitNameForm = function() {
+        var proposedName = "non";
+        var proposedInitials = $("#userInitials").val();
+
+        if (proposedInitials.length >1) {
+            sendUserName(proposedName,proposedInitials);
+            $("#detailsform").hide();
+            changeMode(startmode);
+
+            submitted = true;
+
+        }
+    }
+    startQuiz = function() {
+        quiz = new Quiz();
+        quiz.checkUserStatus(latestuserdata);
+        quiz.sounds = sounds;
+
+//        quiz.newQuestion("What is a thingy?",[
+//            {id:1,text:"this"},
+//            {id:2,text:"that"},
+//            {id:3,text:"who"},
+//            {id:4,text:"if"}
+//        ]);
+
+        $(quiz).on("selectedanswer",function(e,data){
+            console.log(data);
+            console.log("selectedanswer");
+            sendUserData('quizanswer',{
+                aid:data,
+                qid:quiz.currentQuestion.id
+            });
+        });
+    }
+
+    newstatus = function(id){
+        if (currentMode == "joystick") {
+
+            switch (id) {
+                case 0:
+                    $("#everything").css("background-image", 'url("image/walking_d_bg.jpg")');
+
+                    break;
+                case 1:
+
+                        sounds.playsound("death");
+                    $("#everything").css("background-image", 'url("image/walking_d_zombie.jpg")');
+
+                    break;
+                case 2:
+                    $("#everything").css("background-image", 'url("image/walking_d_bg.jpg")');
+
+                    break;
+            }
+
+        }
+
+    }
+
+
+    var count =  Math.round(Math.random()*100);
+
+    var xrand = Math.random() * 10-5;
+    var yrand = Math.random() * 10-5;
+
+    startJoystick = function() {
+        console.log("touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
+        joystick = new VirtualJoystick({
+            container:document.getElementById('container'),
+            mouseSupport:true
+        });
+
+        joystickinterval = setInterval(function () {
+
+//            count++;
+//            var tempx = (Math.sin(count/xrand)*200);
+//            var tempy = (Math.cos(count/yrand)*200);
+//
+//            if (count % 100 == 0) {
+//                console.log("change");
+//                xrand = Math.random() * 10-5;
+//                yrand = Math.random() * 10-5;
+//            }
+
+           // if (joystick.deltaX() != 0 || joystick.deltaY() != 0 ) {
+
+                var tempx = joystick.deltaX()*2;
+                var tempy = joystick.deltaY()*2;
+
+            //}
+
+
+
+            sendUserData('joystickPosition',{
+                x:tempx,
+                y:tempy
+               // x:joystick.deltaX(),
+                //y:joystick.deltaY()
+            });
+//            socket.emit('data', {
+//                x:joystick.deltaX(),
+//                y:joystick.deltaY()
+////            x:testx,
+////            y:testy
+//            });
+
+        }, 1 / 5 * 1000);
+
+        console.log(joystickinterval);
+
+
+    }
+
+    $(document).ready(init);
+
+</script>
+</body>
+</html>

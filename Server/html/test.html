@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+
+<div id="holder">
+
+</div>
+
+
+<script src="js/jquery-2.0.3.js"></script>
+
+<script>
+
+    var max = 4;
+    var c = 0;
+
+    var interval = setInterval(function() {
+        $('<iframe style="height: 600px;" />').attr('src', '/').appendTo('body');
+           c++;
+        if (c >= max) clearInterval(interval);
+    },1000);
+
+
+</script>
+
+</body>
+</html>
