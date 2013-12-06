@@ -9,8 +9,15 @@ var Quiz = require('./modules/quiz.js');
 server.listen(80);
 app.use(express.static(__dirname + '/html'));
 
+app.get('/colour', function(req, res){
+    res.send(currentString);
+});
+
+
 var u = new Users();
 u.init(io);
+
+var currentString = "hello";
 
 u.on('newuser',function(data){
     u.sendDataToMaster("userdata", u.users);
@@ -19,11 +26,21 @@ u.on('userdata',function(data){
     u.sendDataToMaster("userdata", u.users);
 });
 u.on('userevent',function(user,type,data){
-    u.sendDataToMaster("userevent", {
-        user:user,
-        type:type,
-        data:data
-    });
+//    u.sendDataToMaster("userevent", {
+//        user:user,
+//        type:type,
+//        data:data
+//    });
+
+    if (type == "colourstring") {
+        if (user.active) {
+        console.log("NEW COLOUR STRING: " + data);
+            currentString = data;
+        } else {
+            console.log("I REFUSE THIS COLOUR STRING!!!")
+        }
+    }
+
 });
 u.on('userdetails',function(data){
     u.sendDataToMaster("userdata", u.users);
@@ -99,24 +116,24 @@ m.init();
 
 tick = function(){
 //    console.log(u.users);
-    var temparray = new Array();
-    for (userIndex in u.users) {
-        var obj = new Object();
-        var user = u.users[userIndex];
-        obj.sid = user.id;
-        obj.id = user.idnum;
-        obj.initials = user.initials;
-        if (user.data.joystickPosition) {
-            obj.x = user.data.joystickPosition.x;
-            obj.y = user.data.joystickPosition.y;
-        } else {
-            obj.x = 0;
-            obj.y = 0;
-        }
-        temparray.push(obj);
-    }
-    m.sendData("positions",temparray);
-
+//    var temparray = new Array();
+//    for (userIndex in u.users) {
+//        var obj = new Object();
+//        var user = u.users[userIndex];
+//        obj.sid = user.id;
+//        obj.id = user.idnum;
+//        obj.initials = user.initials;
+//        if (user.data.joystickPosition) {
+//            obj.x = user.data.joystickPosition.x;
+//            obj.y = user.data.joystickPosition.y;
+//        } else {
+//            obj.x = 0;
+//            obj.y = 0;
+//        }
+//        temparray.push(obj);
+//    }
+//    m.sendData("positions",temparray);
+    u.checkQueue();
 
 }
 
@@ -139,8 +156,8 @@ m.on("tcpdata",function(data){
 });
 
 setInterval(tick,
-//    3000);
-    1000/30);
+    1000);
+//    1000/30);
 
 
 var q = new Quiz();

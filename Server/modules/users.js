@@ -10,7 +10,7 @@ var sockets = new Object();
 
 var idnum = 1;
 
-
+var userQueue = new Array();
 
 var Users = function() {
     var self = this;
@@ -27,9 +27,9 @@ var Users = function() {
             console.log("new connection");
             socket.join("room");
             socket.emit('pingback', {
-                mode:self.currentMode
+                mode:self.currentMode,
+                queuelength:userQueue.length
             });
-
 
             socket.on('test', function () {
                 /*var user = usersObject[socket.userid];
@@ -37,7 +37,6 @@ var Users = function() {
                     user.data.quizlives = 0;
                     self.sendDataToMaster("userdata",self.users);
                 }*/
-
                 socket.emit("status",1);
 
             });
@@ -105,6 +104,8 @@ var Users = function() {
                 var newuser = createNewUser(socket);
                 fn(newuser);
                 self.emit("newuser",newuser);
+                userQueue.push(newuser);
+                self.checkQueue();
             });
             socket.on('existinguser', function (idfromcookie,fn) {
                 var olduser = usersObject[idfromcookie];
@@ -134,11 +135,61 @@ var Users = function() {
         });
     }
     destroyUser = function(user) {
-        console.log("Destroying User:")
-        console.log(user)
+        console.log("Destroying User:");
+        console.log(user);
+
+       removeFromQueue(user);
+
         user.socket = undefined;
         delete usersObject[user.id];
         self.emit("disconnecteduser",user);
+        self.checkQueue();
+    }
+
+    removeFromQueue = function (user) {
+        var queueindex = userQueue.indexOf(user);
+        if (queueindex > -1) {
+            userQueue.splice(queueindex, 1);
+        }
+    }
+
+    Users.prototype.checkQueue = function() {
+        console.log("----------QUEUE-------------------")
+        console.log(userQueue);
+
+        if (userQueue.length > 0){
+            var frontuser = userQueue[0];
+            if (frontuser.active == false) {
+                frontuser.active = true;
+                frontuser.sessionstarttime = new Date().getTime();
+                frontuser.timeleft = constants.TIMELIMIT;
+            } else {
+                frontuser.timeleft = (frontuser.sessionstarttime + constants.TIMELIMIT) - new Date().getTime();
+                if (frontuser.timeleft < 0) {
+                    frontuser.active = false;
+                    frontuser.queueposition = -1;
+                    removeFromQueue(frontuser);
+                    var usersocket = sockets[frontuser.socket];
+                    if (usersocket) {
+                        usersocket.emit("userstatus",frontuser);
+                    } else {
+                        console.log("No socket for user!")
+                    }
+                }
+            }
+        }
+
+        for (var u in userQueue) {
+            var user = userQueue[u];
+            user.queueposition = userQueue.indexOf(user);
+            var usersocket = sockets[user.socket];
+            if (usersocket) {
+                usersocket.emit("userstatus",user);
+            } else {
+                console.log("No socket for user!")
+            }
+        }
+
     }
 
     tick = function() {
@@ -198,10 +249,13 @@ var Users = function() {
         this.disconnectedtime;
         this.connected = true;
         this.idnum = 0;
-        this.data.avatarid = 0;
+        this.active = false;
+        this.sessionstarttime = 0;
+        this.timeleft = 0;
+        //this.data.avatarid = 0;
+        //this.data.quizlives = constants.STARTQUIZLIVES;
 
-
-        this.data.quizlives = constants.STARTQUIZLIVES;
+        this.queueposition = -1;
     }
 
     setInterval(tick,1000);

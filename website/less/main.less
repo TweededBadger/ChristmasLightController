@@ -13,17 +13,28 @@ body { //  margin: 1em;
   width: 100%;
 }
 
+#debugtxt {
+  width: 200px;
+  background: #008000;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 9999;
+}
+
 #container {
   width: 95%;
-  padding-top: @gradheight + 0.5em;
+
   padding-bottom: 2em;
   margin:0 auto;
   position:relative;
 
+//  padding-top: @gradheight + 0.5em;
+
   @media (min-width: @screen-sm) {
     width: 300px;
     left: -230px;
-    padding-top: 0.5em;
+//    padding-top: 0.5em;
   }
   @media (min-width: @screen-md) {
     width:400px;
@@ -37,6 +48,48 @@ body { //  margin: 1em;
 
 #container.fixed {
   padding-top: @gradheight + 0.5em;
+}
+#container.create {
+  padding-top: @gradheight + 0.5em;
+
+  @media (min-width: @screen-sm) {
+    padding-top: 0.5em;
+  }
+@media (min-width: @screen-md) {
+}
+@media (min-width: @screen-lg) {
+}
+
+}
+
+#startscreen,
+#creator,
+#waitscreen,
+#endscreen {
+  display: none;
+  margin-bottom: 0.5em;
+}
+
+
+
+#startscreen,
+#waitscreen,
+#endscreen
+{
+  text-align: center;
+}
+
+
+#creator {
+//  padding-top: 0.5em;
+  position: relative;
+
+  padding-top: 0.5em;
+  @media (min-width: @screen-sm) {
+
+    padding-top: 0;
+  }
+
 }
 
 #gradientHolder {
@@ -88,6 +141,14 @@ body { //  margin: 1em;
   z-index: 6;
 
 }
+
+#timeleft {
+  position: absolute;
+  top: 0.5em;
+  left: 0.5em;
+  z-index: 6;
+}
+
 #btn_process {
   display: block;
   margin: 0 auto;
@@ -197,18 +258,21 @@ body { //  margin: 1em;
     left: 310px;
     height: 368px;
     padding: 0;
+    top: 0.5em;
   }
 @media (min-width: @screen-md) {
   width:590px;
 height: 471px;
 left: 410px;
 padding: 0;
+top: 0.5em;
 }
 @media (min-width: @screen-lg) {
 left:460px;
 width:730px;
 height: 580px;
 padding: 0;
+top: 0.5em;
 }
 
 }

@@ -8,9 +8,16 @@ body {
 #sliders {
   width: 100%;
 }
+#debugtxt {
+  width: 200px;
+  background: #008000;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 9999;
+}
 #container {
   width: 95%;
-  padding-top: 6.5em;
   padding-bottom: 2em;
   margin: 0 auto;
   position: relative;
@@ -19,7 +26,6 @@ body {
   #container {
     width: 300px;
     left: -230px;
-    padding-top: 0.5em;
   }
 }
 @media (min-width: 992px) {
@@ -36,6 +42,41 @@ body {
 }
 #container.fixed {
   padding-top: 6.5em;
+}
+#container.create {
+  padding-top: 6.5em;
+}
+@media (min-width: 768px) {
+  #container.create {
+    padding-top: 0.5em;
+  }
+}
+@media (min-width: 992px) {
+  
+}
+@media (min-width: 1200px) {
+  
+}
+#startscreen,
+#creator,
+#waitscreen,
+#endscreen {
+  display: none;
+  margin-bottom: 0.5em;
+}
+#startscreen,
+#waitscreen,
+#endscreen {
+  text-align: center;
+}
+#creator {
+  position: relative;
+  padding-top: 0.5em;
+}
+@media (min-width: 768px) {
+  #creator {
+    padding-top: 0;
+  }
 }
 #gradientHolder {
   position: fixed;
@@ -80,6 +121,12 @@ body {
   position: absolute;
   top: 0;
   width: 100%;
+  z-index: 6;
+}
+#timeleft {
+  position: absolute;
+  top: 0.5em;
+  left: 0.5em;
   z-index: 6;
 }
 #btn_process {
@@ -175,6 +222,7 @@ body {
     left: 310px;
     height: 368px;
     padding: 0;
+    top: 0.5em;
   }
 }
 @media (min-width: 992px) {
@@ -183,6 +231,7 @@ body {
     height: 471px;
     left: 410px;
     padding: 0;
+    top: 0.5em;
   }
 }
 @media (min-width: 1200px) {
@@ -191,6 +240,7 @@ body {
     width: 730px;
     height: 580px;
     padding: 0;
+    top: 0.5em;
   }
 }
 @media (min-width: 768px) {
