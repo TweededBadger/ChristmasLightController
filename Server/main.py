@@ -3,6 +3,7 @@ import math
 import serial
 import time
 import MySQLdb
+import urllib2
 
 from threading import Thread, Lock
 class Serial:
@@ -167,18 +168,23 @@ def test():
     count = 0
 
     while True:
-        db = MySQLdb.connect(host="127.0.0.1", user="root", passwd="", db="christmaslights")
-
-        cur = db.cursor()
-
-        cur.execute("SELECT * FROM data")
-        print "Checking DB"
+        # db = MySQLdb.connect(host="127.0.0.1", user="root", passwd="", db="christmaslights")
+        #
+        # cur = db.cursor()
+        #
+        # cur.execute("SELECT * FROM data")
+        print "Checking"
         newstr = "";
-        for row in cur.fetchall():
-            newstr = row[1]
+
+        response = urllib2.urlopen('http://localhost:7676/colour')
+        newstr = response.read()
+
+        # for row in cur.fetchall():
+        #     newstr = row[1]
 
 
         if (newstr != lightstring):
+            print "NEW STRING"
             count = 0
             lightstring = newstr
             sendBigString(lightstring)
@@ -191,7 +197,7 @@ def test():
                 sendColorArray()
 
 
-        db.close()
+        # db.close()
 
         time.sleep(1)
         pass

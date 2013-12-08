@@ -166,7 +166,7 @@ var Users = function() {
             } else {
                 frontuser.timeleft = (frontuser.sessionstarttime + constants.TIMELIMIT) - new Date().getTime();
                 if (frontuser.timeleft < 0) {
-                    frontuser.active = false;
+                    //frontuser.active = false;
                     frontuser.queueposition = -1;
                     removeFromQueue(frontuser);
                     var usersocket = sockets[frontuser.socket];
@@ -249,7 +249,7 @@ var Users = function() {
         this.disconnectedtime;
         this.connected = true;
         this.idnum = 0;
-        this.active = false;
+        this.active = true;
         this.sessionstarttime = 0;
         this.timeleft = 0;
         //this.data.avatarid = 0;

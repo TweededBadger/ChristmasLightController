@@ -6,7 +6,7 @@ var Users = require('./modules/users.js');
 var MasterConnection = require('./modules/masterConnection.js');
 var Quiz = require('./modules/quiz.js');
 
-server.listen(80);
+server.listen(7676);
 app.use(express.static(__dirname + '/html'));
 
 app.get('/colour', function(req, res){

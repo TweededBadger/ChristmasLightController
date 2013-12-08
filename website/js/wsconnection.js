@@ -3,7 +3,7 @@ var joinedQueue = false;
 var inQ = 0;
 var active = false;
 initSocket = function() {
-    socket = io.connect(':80/');
+    socket = io.connect(':7676/');
     socket.on('pingback', function (data) {
         inQ = data.queuelength;
         if (inQ == 1){
