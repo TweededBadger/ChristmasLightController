@@ -30,7 +30,18 @@
 
 </div>
 
+<div id="header">
+    <img src="images/header.png">
+</div>
+
 <div id="container">
+
+    <div id="streamframeholder">
+        <iframe id="streamframe" width="480" height="302"
+                src="http://www.ustream.tv/embed/16427450?ub=85a901&amp;lc=85a901&amp;oc=ffffff&amp;uc=ffffff&amp;v=3&amp;wmode=direct"
+                scrolling="no" frameborder="0" style="border: 0px none transparent;"></iframe>
+    </div>
+
     <div id="startscreen">
         <h3 class="text-center">Welcome! There are currently <span id="queuelength">X people</span> in the queue.</h3>
         <button class="btn btn-default" id="btn_join">Click here to join the queue</button>
@@ -47,11 +58,7 @@
     </div>
 
 
-    <div id="streamframeholder">
-        <iframe id="streamframe" width="480" height="302"
-                src="http://www.ustream.tv/embed/16427450?ub=85a901&amp;lc=85a901&amp;oc=ffffff&amp;uc=ffffff&amp;v=3&amp;wmode=direct"
-                scrolling="no" frameborder="0" style="border: 0px none transparent;"></iframe>
-    </div>
+
 
     <div id="creator">
         <div id="gradientHolder">
@@ -159,20 +166,26 @@ init = function () {
     });
 
 
-//        theLoc = $('#sliders').position().top;
-    theLoc = 5;
+        //theLoc = $("#creator").offset().top;
+//    theLoc = 50;
     $(window).scroll(function () {
+        theLoc = $("#creator").offset().top;
+        console.log(theLoc);
         if (theLoc >= $(window).scrollTop()) {
             //if($('#gradientHolder').hasClass('fixed')) {
             $('#gradientHolder').removeClass('fixed');
             $('#container').removeClass('fixed');
             $('#streamframeholder').removeClass('fixed');
+            $('#sliders').removeClass('fixed');
+            $('#creator').removeClass('fixed');
             //}
         } else {
             //if(!$('#gradientHolder').hasClass('fixed')) {
             $('#gradientHolder').addClass('fixed');
             $('#container').addClass('fixed');
             $('#streamframeholder').addClass('fixed');
+            $('#sliders').addClass('fixed');
+            $('#creator').addClass('fixed');
             //}
         }
     });

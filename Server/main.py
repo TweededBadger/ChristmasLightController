@@ -7,7 +7,7 @@ import urllib2
 
 from threading import Thread, Lock
 class Serial:
-  def __init__(self, port='COM6', rate=9600, timeout=10):
+  def __init__(self, port='COM5', rate=9600, timeout=10):
       self._serial = serial.Serial(port, rate, timeout=timeout)
       self._mutex = Lock()
       self._mutex.acquire()
@@ -42,7 +42,7 @@ class Serial:
 
 import random, string
 def main():
-  serial = Serial(port='COM6', rate=115200)
+  serial = Serial(port='COM5', rate=115200)
   passed = 0
   failed = 0
   for i in range(1000):
@@ -60,7 +60,7 @@ def main():
 
 colors = []
 
-serial = Serial(port='COM6', rate=115200)
+serial = Serial(port='COM5', rate=115200)
 
 def sendColorArray():
     time.sleep(1)

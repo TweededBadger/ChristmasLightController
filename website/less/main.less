@@ -6,7 +6,7 @@
 @gradheight: 6em;
 
 body { //  margin: 1em;
-  background-color: #cccccc;
+  background-color: #ffffff;
 }
 
 #sliders {
@@ -20,7 +20,33 @@ body { //  margin: 1em;
   bottom: 0;
   left: 0;
   z-index: 9999;
+  display: none;
 }
+
+#header {
+  background-image: url("../images/headertile.png");
+  background-size: 100% 100%;
+  background-repeat: repeat-x;
+  text-align: center;
+}
+
+#header img {
+  width:100%;
+
+  @media (min-width: @screen-sm) {
+    width:100%;
+  }
+@media (min-width: @screen-md) {
+  height: 13em;
+  width:auto;
+}
+@media (min-width: @screen-lg) {
+  height: 13em;
+  width:auto;
+}
+
+}
+
 
 #container {
   width: 95%;
@@ -47,10 +73,11 @@ body { //  margin: 1em;
 }
 
 #container.fixed {
-  padding-top: @gradheight + 0.5em;
+//  padding-top: @gradheight + 0.5em;
 }
 #container.create {
-  padding-top: @gradheight + 0.5em;
+  //padding-top: @gradheight + 0.5em;
+  padding-top: 0.5em;
 
   @media (min-width: @screen-sm) {
     padding-top: 0.5em;
@@ -92,12 +119,28 @@ body { //  margin: 1em;
 
 }
 
+#creator.fixed {
+  padding-top: @gradheight;
+
+//  @media (min-width: @screen-sm) {
+//
+//  }
+//@media (min-width: @screen-md) {
+//  margin-top: 0;
+//}
+//@media (min-width: @screen-lg) {
+//  margin-top: 0;
+//}
+}
+
 #gradientHolder {
-  position: fixed;
+//  position: fixed;
+  position: relative;
   top: 0;
-  width: 95%;
+  width: 100%;
   height: @gradheight;
   z-index: 5;
+  margin-bottom: 0.5em;
 
   @media (min-width: @screen-sm) {
     position:inherit;
@@ -114,6 +157,19 @@ body { //  margin: 1em;
 
 #gradientHolder.fixed {
   position: fixed;
+  width: 95%;
+
+  @media (min-width: @screen-sm) {
+    position:fixed;
+    width: 300px;
+  }
+@media (min-width: @screen-md) {
+  width:400px;
+}
+@media (min-width: @screen-lg) {
+  width:450px;
+}
+
 
 }
 
