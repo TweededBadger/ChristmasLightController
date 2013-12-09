@@ -7,7 +7,7 @@ import urllib2
 
 from threading import Thread, Lock
 class Serial:
-  def __init__(self, port='COM5', rate=9600, timeout=10):
+  def __init__(self, port='COM6', rate=9600, timeout=10):
       self._serial = serial.Serial(port, rate, timeout=timeout)
       self._mutex = Lock()
       self._mutex.acquire()
@@ -42,7 +42,7 @@ class Serial:
 
 import random, string
 def main():
-  serial = Serial(port='COM5', rate=115200)
+  serial = Serial(port='COM6', rate=115200)
   passed = 0
   failed = 0
   for i in range(1000):
@@ -60,7 +60,7 @@ def main():
 
 colors = []
 
-serial = Serial(port='COM5', rate=115200)
+serial = Serial(port='COM6', rate=115200)
 
 def sendColorArray():
     time.sleep(1)
@@ -173,34 +173,44 @@ def test():
         # cur = db.cursor()
         #
         # cur.execute("SELECT * FROM data")
-        print "Checking"
-        newstr = "";
+		
+		try:
+		
+			print "Checking"
+			newstr = "";
 
-        response = urllib2.urlopen('http://localhost:7676/colour')
-        newstr = response.read()
+			#response = urllib2.urlopen('http://localhost:7676/colour')
+			response = urllib2.urlopen('http://arcane-reaches-8269.herokuapp.com/colour')
+			newstr = response.read()
 
-        # for row in cur.fetchall():
-        #     newstr = row[1]
-
-
-        if (newstr != lightstring):
-            print "NEW STRING"
-            count = 0
-            lightstring = newstr
-            sendBigString(lightstring)
+			# for row in cur.fetchall():
+			#     newstr = row[1]
 
 
-        else:
-            count = count +1
-            if count == 600:
-                createBlankColorArray()
-                sendColorArray()
+			if (newstr != lightstring):
+				print "NEW STRING"
+				count = 0
+				lightstring = newstr
+				sendBigString(lightstring)
 
 
-        # db.close()
+			else:
+				count = count +1
+				if count == 600:
+					createBlankColorArray()
+					sendColorArray()
 
-        time.sleep(1)
-        pass
+
+			# db.close()
+
+			time.sleep(1)
+			pass
+			
+		except:
+			print "error"
+			pass
+			
+			
 
     # for k in range(1, 240):
     #     # print k

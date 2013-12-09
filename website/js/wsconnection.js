@@ -3,7 +3,8 @@ var joinedQueue = false;
 var inQ = 0;
 var active = false;
 initSocket = function() {
-    socket = io.connect(':7676/');
+    //socket = io.connect(':7676/');
+    socket = io.connect('http://arcane-reaches-8269.herokuapp.com/');
     socket.on('pingback', function (data) {
         inQ = data.queuelength;
         if (inQ == 1){

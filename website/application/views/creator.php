@@ -191,18 +191,21 @@ processColor = function () {
     var data = rect.cacheCanvas.getContext("2d").getImageData(0, 0, 240, 1);
 
     var outstring = "";
+	var scale = 8;
+	
+	for(var j = 0; j < scale; j++) {
+    for (var i = 0; i < 240/scale; i++) {
 
-    for (var i = 0; i < 240; i++) {
-
-        var r = Math.round(data.data[i * 4] * intensity);
-        var g = Math.round(data.data[(i * 4) + 1] * intensity);
-        var b = Math.round(data.data[(i * 4) + 2] * intensity);
-        var a = Math.round(data.data[(i * 4) + 3] * intensity);
+        var r = Math.round(data.data[i * 4* scale] * intensity);
+        var g = Math.round(data.data[(i * 4* scale) + 1] * intensity);
+        var b = Math.round(data.data[(i * 4* scale) + 2] * intensity);
+        var a = Math.round(data.data[(i * 4* scale) + 3] * intensity);
         //console.log( r + "," + g + "," + b + "," + a);
 
-        outstring += "i" + (i + 1) + "r" + r + "g" + g + "b" + b;
+        outstring += "i" + ((i + 1)+(j*240/scale)) + "r" + r + "g" + g + "b" + b;
 
     }
+	}
     console.log(outstring);
 
 //    $.post("data/set?val=" + outstring, function () {
@@ -308,7 +311,6 @@ buildColorArray = function () {
         carray.push(val);
         $(colors[o].slider.handle1).css("background-color", colors[o].colorpicker.val());
         $(colors[o].slider.handle1).css("background-image", "none");
-
         $(colors[o].holder).find(".triangle").css("border-color", colors[o].colorpicker.val() + " transparent transparent transparent");
 
         // .sliderholder .triangle
