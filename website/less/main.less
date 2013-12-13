@@ -7,6 +7,11 @@
 
 body { //  margin: 1em;
   background-color: #ffffff;
+  background-image: url("../images/tile.gif");
+  font-family: "brandon-grotesque";
+}
+h1,h2,h3,h4{
+  font-family: "brandon-grotesque";  
 }
 
 #sliders {
@@ -120,7 +125,7 @@ body { //  margin: 1em;
 }
 
 #creator.fixed {
-  padding-top: @gradheight;
+  padding-top: @gradheight + 5em;
 
 //  @media (min-width: @screen-sm) {
 //
@@ -138,9 +143,11 @@ body { //  margin: 1em;
   position: relative;
   top: 0;
   width: 100%;
-  height: @gradheight;
+//  height: @gradheight;
   z-index: 5;
   margin-bottom: 0.5em;
+  border: 1px solid #cccccc;
+  background-color:#ffffff;
 
   @media (min-width: @screen-sm) {
     position:inherit;
@@ -174,10 +181,10 @@ body { //  margin: 1em;
 }
 
 .canvasHolder {
-  position: absolute;
+//  position: absolute;
   width: 100%;
-  height: 100%;
-  top: 0;
+  height: @gradheight;
+//  top: 0;
   z-index: 5;
 
 }
@@ -191,11 +198,12 @@ body { //  margin: 1em;
 /*max-width: 600px;*/ //  margin-left: 27px;
 }
 #send_button_holder {
-  position: absolute;
-  top: 0;
-  width: 100%;
+//  position: absolute;
+//  top: 0;
+  margin: 0.5em auto;
+  width: 60%;
   z-index: 6;
-
+  
 }
 
 #timeleft {
@@ -203,13 +211,17 @@ body { //  margin: 1em;
   top: 0.5em;
   left: 0.5em;
   z-index: 6;
+  color: #ffffff;
 }
 
 #btn_process {
   display: block;
   margin: 0 auto;
-  margin-top: @gradheight/3;
-  background-color: rgba(255,255,255,0.2);
+  width: 100%;
+  background-color: #3ab54b;
+  color:#ffffff;
+//  margin-top: @gradheight/4;
+//  background-color: rgba(255,255,255,0.2);
 }
 
 
@@ -251,21 +263,28 @@ body { //  margin: 1em;
   top: 0;
   left: 0;
 }
+.sliderholder .delete , .sliderholder .copy {
+  color: #808080;
+  background-color: #ffffff;
+  border: none;
+}
 .sliderholder .delete {
   position: absolute;
   top: 0;
   right: 0;
+  font-size: 1em;
 }
 .sliderholder .copy {
   position: absolute;
   top: 0;
   right: 2em;
+  font-size: 1em;
 }
 
 .sliderholder .minicolors-input {
   height: 28px;
   width: 25px;
-  display: inline-block;
+  display: none;
   padding-left: 26px;
   border: none;
 }
@@ -303,10 +322,11 @@ body { //  margin: 1em;
 #streamframeholder {
   width: 100%;
   height: 0px;
-  margin: 0 auto 0.5em auto;
+  margin: 0 auto 3.5em auto;
   position: relative;
   padding: 66% 0 0 0;
-
+  font-size: 1em;
+  text-align: center;
 
   @media (min-width: @screen-sm) {
     width: 449px;
@@ -366,4 +386,23 @@ position: fixed;
   top: 0;
   left: 0;
 
+
+  @media (min-width: @screen-sm) {
+    position: relative;
+
+  }
+@media (min-width: @screen-md) {
+position: relative;
+
+}
+@media (min-width: @screen-lg) {
+  position: relative;
+
+}
+
+
+}
+#speedmessage {
+  display: none;
+//  opacity: 0;;
 }

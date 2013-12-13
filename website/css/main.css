@@ -1,9 +1,20 @@
 .btn {
-  border-radius: 0px;
   background-color: #ffffff;
+  border: 1px solid #cccccc;
+  font-size: 1.5em;
+  color: #3ab54b;
+  font-weight: bold;
 }
 body {
   background-color: #ffffff;
+  background-image: url("../images/tile.gif");
+  font-family: "brandon-grotesque";
+}
+h1,
+h2,
+h3,
+h4 {
+  font-family: "brandon-grotesque";
 }
 #sliders {
   width: 100%;
@@ -103,15 +114,16 @@ body {
   }
 }
 #creator.fixed {
-  padding-top: 6em;
+  padding-top: 11em;
 }
 #gradientHolder {
   position: relative;
   top: 0;
   width: 100%;
-  height: 6em;
   z-index: 5;
   margin-bottom: 0.5em;
+  border: 1px solid #cccccc;
+  background-color: #ffffff;
 }
 @media (min-width: 768px) {
   #gradientHolder {
@@ -151,10 +163,8 @@ body {
   }
 }
 .canvasHolder {
-  position: absolute;
   width: 100%;
-  height: 100%;
-  top: 0;
+  height: 6em;
   z-index: 5;
 }
 #testCanvas {
@@ -163,9 +173,8 @@ body {
   /*max-width: 600px;*/
 }
 #send_button_holder {
-  position: absolute;
-  top: 0;
-  width: 100%;
+  margin: 0.5em auto;
+  width: 60%;
   z-index: 6;
 }
 #timeleft {
@@ -173,12 +182,14 @@ body {
   top: 0.5em;
   left: 0.5em;
   z-index: 6;
+  color: #ffffff;
 }
 #btn_process {
   display: block;
   margin: 0 auto;
-  margin-top: 2em;
-  background-color: rgba(255, 255, 255, 0.2);
+  width: 100%;
+  background-color: #3ab54b;
+  color: #ffffff;
 }
 #slider {
   width: 200px;
@@ -212,20 +223,28 @@ body {
   top: 0;
   left: 0;
 }
+.sliderholder .delete,
+.sliderholder .copy {
+  color: #808080;
+  background-color: #ffffff;
+  border: none;
+}
 .sliderholder .delete {
   position: absolute;
   top: 0;
   right: 0;
+  font-size: 1em;
 }
 .sliderholder .copy {
   position: absolute;
   top: 0;
   right: 2em;
+  font-size: 1em;
 }
 .sliderholder .minicolors-input {
   height: 28px;
   width: 25px;
-  display: inline-block;
+  display: none;
   padding-left: 26px;
   border: none;
 }
@@ -256,9 +275,11 @@ body {
 #streamframeholder {
   width: 100%;
   height: 0px;
-  margin: 0 auto 0.5em auto;
+  margin: 0 auto 3.5em auto;
   position: relative;
   padding: 66% 0 0 0;
+  font-size: 1em;
+  text-align: center;
 }
 @media (min-width: 768px) {
   #streamframeholder {
@@ -318,4 +339,22 @@ body {
   position: absolute;
   top: 0;
   left: 0;
+}
+@media (min-width: 768px) {
+  #streamframe {
+    position: relative;
+  }
+}
+@media (min-width: 992px) {
+  #streamframe {
+    position: relative;
+  }
+}
+@media (min-width: 1200px) {
+  #streamframe {
+    position: relative;
+  }
+}
+#speedmessage {
+  display: none;
 }

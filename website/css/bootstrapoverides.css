@@ -1,4 +1,7 @@
 .btn {
-  border-radius: 0px;
   background-color: #ffffff;
+  border: 1px solid #cccccc;
+  font-size: 1.5em;
+  color: #3ab54b;
+  font-weight: bold;
 }

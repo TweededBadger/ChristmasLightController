@@ -1,205 +1,156 @@
-<?php
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Control the Crab Christmas Lights</title>
+    <meta http-equiv="x-ua-compatible" content="IE=10">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/slider.css" rel="stylesheet">
+    <link href="css/jquery.minicolors.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <script type='text/javascript' src="js/modernizr.js"></script>
+    <script type="text/javascript" src="//use.typekit.net/irr2udn.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
-/*
- *---------------------------------------------------------------
- * APPLICATION ENVIRONMENT
- *---------------------------------------------------------------
- *
- * You can load different configurations depending on your
- * current environment. Setting the environment also influences
- * things like logging and error reporting.
- *
- * This can be set to anything, but default usage is:
- *
- *     development
- *     testing
- *     production
- *
- * NOTE: If you change these, also change the error_reporting() code below
- *
- */
-	define('ENVIRONMENT', 'development');
-/*
- *---------------------------------------------------------------
- * ERROR REPORTING
- *---------------------------------------------------------------
- *
- * Different environments will require different levels of error reporting.
- * By default development will show errors but testing and live will hide them.
- */
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
 
-if (defined('ENVIRONMENT'))
-{
-	switch (ENVIRONMENT)
-	{
-		case 'development':
-			error_reporting(E_ALL);
-		break;
-	
-		case 'testing':
-		case 'production':
-			error_reporting(0);
-		break;
+    <style>
 
-		default:
-			exit('The application environment is not set correctly.');
-	}
-}
-
-/*
- *---------------------------------------------------------------
- * SYSTEM FOLDER NAME
- *---------------------------------------------------------------
- *
- * This variable must contain the name of your "system" folder.
- * Include the path if the folder is not in the same  directory
- * as this file.
- *
- */
-	$system_path = 'system';
-
-/*
- *---------------------------------------------------------------
- * APPLICATION FOLDER NAME
- *---------------------------------------------------------------
- *
- * If you want this front controller to use a different "application"
- * folder then the default one you can set its name here. The folder
- * can also be renamed or relocated anywhere on your server.  If
- * you do, use a full server path. For more info please see the user guide:
- * http://codeigniter.com/user_guide/general/managing_apps.html
- *
- * NO TRAILING SLASH!
- *
- */
-	$application_folder = 'application';
-
-/*
- * --------------------------------------------------------------------
- * DEFAULT CONTROLLER
- * --------------------------------------------------------------------
- *
- * Normally you will set your default controller in the routes.php file.
- * You can, however, force a custom routing by hard-coding a
- * specific controller class/function here.  For most applications, you
- * WILL NOT set your routing here, but it's an option for those
- * special instances where you might want to override the standard
- * routing in a specific front controller that shares a common CI installation.
- *
- * IMPORTANT:  If you set the routing here, NO OTHER controller will be
- * callable. In essence, this preference limits your application to ONE
- * specific controller.  Leave the function name blank if you need
- * to call functions dynamically via the URI.
- *
- * Un-comment the $routing array below to use this feature
- *
- */
-	// The directory name, relative to the "controllers" folder.  Leave blank
-	// if your controller is not in a sub-folder within the "controllers" folder
-	// $routing['directory'] = '';
-
-	// The controller class file name.  Example:  Mycontroller
-	// $routing['controller'] = '';
-
-	// The controller function you wish to be called.
-	// $routing['function']	= '';
+    </style>
+</head>
 
 
-/*
- * -------------------------------------------------------------------
- *  CUSTOM CONFIG VALUES
- * -------------------------------------------------------------------
- *
- * The $assign_to_config array below will be passed dynamically to the
- * config class when initialized. This allows you to set custom config
- * items or override any default config values found in the config.php file.
- * This can be handy as it permits you to share one application between
- * multiple front controller files, with each file containing different
- * config values.
- *
- * Un-comment the $assign_to_config array below to use this feature
- *
- */
-	// $assign_to_config['name_of_config_item'] = 'value of config item';
+<body>
+
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-561739-25', 'crabcreative.com');
+    ga('send', 'pageview');
+
+</script>
+
+<div id="debugtxt">
+
+</div>
+
+<div id="header">
+    <img src="images/header.png">
+</div>
+
+<div id="container">
+
+    <div id="streamframeholder">
+        <iframe id="streamframe" width="480" height="302"
+                src="http://www.ustream.tv/embed/16427450?ub=85a901&amp;lc=85a901&amp;oc=ffffff&amp;uc=ffffff&amp;v=3&amp;wmode=direct"
+                scrolling="no" frameborder="0" style="border: 0px none transparent;"></iframe>
+        <span id="speedmessage">(Depending on the speed of your connection, your pattern may take a few seconds to appear)</span>
+    </div>
+
+    <div id="startscreen">
+        <h2 class="text-center">Seasons Greetings!</h2>
+        <h3>Our ever popular tree has <span id="queuelength">X people</span> waiting to take control.</h3>
+        <h3>Why not join the queue and watch the stream while you wait?</h3>
+        <!--<h3>You should be able to get in on the action in around <span class="timetogo"></span>.</h3>-->
+        <button class="btn btn-default" id="btn_join">Click here to join the queue</button>
+    </div>
+
+
+    <div id="waitscreen">
+        <h3 class="text-center">Almost there!</h3>
+        <h3>Just <span id="queuepos"></span> people in front of you.</h3>
+        <h3>Less than <span class="timetogo"></span> to go!</h3>
+    </div>
+
+    <div id="endscreen">
+        <h3 class="text-center">Alas your time with our tree is up, although feel free to join the queue again!</h3>
+        <button class="btn btn-default" id="btn_join2">Click here to join the queue</button>
+    </div>
 
 
 
-// --------------------------------------------------------------------
-// END OF USER CONFIGURABLE SETTINGS.  DO NOT EDIT BELOW THIS LINE
-// --------------------------------------------------------------------
 
-/*
- * ---------------------------------------------------------------
- *  Resolve the system path for increased reliability
- * ---------------------------------------------------------------
- */
-
-	// Set the current directory correctly for CLI requests
-	if (defined('STDIN'))
-	{
-		chdir(dirname(__FILE__));
-	}
-
-	if (realpath($system_path) !== FALSE)
-	{
-		$system_path = realpath($system_path).'/';
-	}
-
-	// ensure there's a trailing slash
-	$system_path = rtrim($system_path, '/').'/';
-
-	// Is the system path correct?
-	if ( ! is_dir($system_path))
-	{
-		exit("Your system folder path does not appear to be set correctly. Please open the following file and correct this: ".pathinfo(__FILE__, PATHINFO_BASENAME));
-	}
-
-/*
- * -------------------------------------------------------------------
- *  Now that we know the path, set the main path constants
- * -------------------------------------------------------------------
- */
-	// The name of THIS file
-	define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
-
-	// The PHP file extension
-	// this global constant is deprecated.
-	define('EXT', '.php');
-
-	// Path to the system folder
-	define('BASEPATH', str_replace("\\", "/", $system_path));
-
-	// Path to the front controller (this file)
-	define('FCPATH', str_replace(SELF, '', __FILE__));
-
-	// Name of the "system folder"
-	define('SYSDIR', trim(strrchr(trim(BASEPATH, '/'), '/'), '/'));
+    <div id="creator">
+        <div id="gradientHolder">
+            <div class="canvasHolder">
+                <canvas id="testCanvas" width="240" height="40"></canvas>
+            </div>
+            <div id="send_button_holder">
+                <button id="btn_process" class="btn">SEND TO <span class="icon-christmastree"></span></button>
+            </div>
+            <div id="timeleft"><span class="icon-clock2"></span>&nbsp;&nbsp;<span id="timelefttxt"></span></div>
+        </div>
+        <div id="sliders">
+        </div>
+        <div>
+            <button id="btn_add" class="btn">+</button>
+        </div>
+    </div>
 
 
-	// The path to the "application" folder
-	if (is_dir($application_folder))
-	{
-		define('APPPATH', $application_folder.'/');
-	}
-	else
-	{
-		if ( ! is_dir(BASEPATH.$application_folder.'/'))
-		{
-			exit("Your application folder path does not appear to be set correctly. Please open the following file and correct this: ".SELF);
-		}
+</div>
 
-		define('APPPATH', BASEPATH.$application_folder.'/');
-	}
+<!--<iframe width="720" height="437" src="http://www.ustream.tv/embed/16427450?v=3&amp;wmode=direct" scrolling="no" frameborder="0" style="border: 0px none transparent;">    </iframe>-->
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="js/jquery-1.10.2.min.js"></script>
+<!--<script src="js/jquery-ui-1.8.18.custom.min.js"></script>-->
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<!--<script src="js/bootstrap.min.js"></script>-->
+<script src="js/jquery.minicolors.js"></script>
+<script src="js/bootstrap-slider.js"></script>
+<script src="js/tinycolor-min.js"></script>
+<script src="js/socketio.js"></script>
+<script src="js/wsconnection.min.js"></script>
+<script src="js/cookies.min.js"></script>
 
-/*
- * --------------------------------------------------------------------
- * LOAD THE BOOTSTRAP FILE
- * --------------------------------------------------------------------
- *
- * And away we go...
- *
- */
-require_once BASEPATH.'core/CodeIgniter.php';
 
-/* End of file index.php */
-/* Location: ./index.php */
+<script type="text/javascript" src="js/createjs/events/Event.js"></script>
+<script type="text/javascript" src="js/createjs/events/EventDispatcher.js"></script>
+<script type="text/javascript" src="js/createjs/utils/IndexOf.js"></script>
+<script type="text/javascript" src="js/easeljs/utils/UID.js"></script>
+<!--<script type="text/javascript" src="js/easeljs/utils/Ticker.js"></script>-->
+<script type="text/javascript" src="js/easeljs/geom/Matrix2D.js"></script>
+<!--<script type="text/javascript" src="js/easeljs/geom/Point.js"></script>-->
+<script type="text/javascript" src="js/easeljs/geom/Rectangle.js"></script>
+<!--<script type="text/javascript" src="js/easeljs/display/Shadow.js"></script>-->
+<!--<script type="text/javascript" src="js/easeljs/display/SpriteSheet.js"></script>-->
+<script type="text/javascript" src="js/easeljs/display/Graphics.js"></script>
+<script type="text/javascript" src="js/easeljs/display/DisplayObject.js"></script>
+<script type="text/javascript" src="js/easeljs/display/Container.js"></script>
+<script type="text/javascript" src="js/easeljs/display/Stage.js"></script>
+<script type="text/javascript" src="js/easeljs/display/Bitmap.js"></script>
+<!--<script type="text/javascript" src="js/easeljs/display/Sprite.js"></script>-->
+<!--<script type="text/javascript" src="js/easeljs/display/BitmapAnimation.js"></script>-->
+<!--<script type="text/javascript" src="js/easeljs/display/BitmapText.js"></script>-->
+<script type="text/javascript" src="js/easeljs/display/Shape.js"></script>
+<!--<script type="text/javascript" src="js/easeljs/display/Text.js"></script>-->
+<!--<script type="text/javascript" src="js/easeljs/display/DOMElement.js"></script>-->
+<!--<script type="text/javascript" src="js/easeljs/events/MouseEvent.js"></script>-->
+<!--<script type="text/javascript" src="js/easeljs/filters/Filter.js"></script>-->
+<!--<script type="text/javascript" src="js/easeljs/ui/ButtonHelper.js"></script>-->
+<!--<script type="text/javascript" src="js/easeljs/ui/Touch.js"></script>-->
+<!--<script type="text/javascript" src="js/easeljs/utils/SpriteSheetUtils.js"></script>-->
+<!--<script type="text/javascript" src="js/easeljs/utils/SpriteSheetBuilder.js"></script>-->
+<!--<script type="text/javascript" src="js/easeljs/filters/BlurFilter.js"></script>-->
+<!--<script type="text/javascript" src="js/easeljs/filters/ColorMatrix.js"></script>-->
+<!--<script type="text/javascript" src="js/easeljs/filters/ColorMatrixFilter.js"></script>-->
+<!--<script type="text/javascript" src="js/easeljs/filters/AlphaMaskFilter.js"></script>-->
+
+
+
+    <script src="js/main.min.js"></script>
+
+
+
+</body>
+</html>
